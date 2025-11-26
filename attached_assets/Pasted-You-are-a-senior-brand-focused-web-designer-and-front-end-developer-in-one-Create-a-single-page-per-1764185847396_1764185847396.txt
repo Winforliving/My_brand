@@ -1,0 +1,133 @@
+You are a senior brand-focused web designer and front-end developer in one.
+Create a single-page personal website for a Hungarian freelance web designer / developer called „Szecskó Zoltán” (use this name on the site).
+
+Language & tone
+	•	All text, navigation and UI labels must be in Hungarian.
+	•	Tone of voice: közvetlen, barátságos, de profi.
+	•	Avoid corporate jargon, write like someone who really segít kisvállalkozóknak és kézműves márkáknak.
+
+Goal of the page
+
+The page must:
+	•	Make Zoltán look trustworthy, kompetens és igényes.
+	•	Clearly communicate:
+If his own website looks this good, clients can trust him with their own website/webshop.
+	•	Show that he:
+	•	designs and builds websites & webshops
+	•	understands UX, conversion, and SEO
+	•	can help businesses get fewer repetitive DMs and more rendezett online jelenlét.
+
+Visual style & layout
+	•	Single-page, scrolling layout.
+	•	Modern, clean, lots of whitespace, responsive (mobile-first).
+	•	Design language:
+	•	Soft, neutral background (light theme), with 1–2 accent colors.
+	•	Rounded cards, subtle shadows, nice spacing.
+	•	Professional Google-font-like typography (one bold display font for headings, simple sans-serif for body).
+	•	Visually show structure and hierarchy: big hero, clear sections, strong CTAs.
+
+Sections (top to bottom)
+
+1) Hero section
+	•	Full-width hero at the top with:
+	•	Main headline in Hungarian that clearly says what he does, for whom. Example idea (rewrite in your own words):
+„Weboldalakat és webshopokat készítek kisvállalkozásoknak, amik nem csak szépek, hanem pénzt is hoznak.”
+	•	Subheadline, 1–2 short sentences about:
+	•	helping craftsmen, jewellery brands, small businesses, coaches, service providers;
+	•	creating sites that reduce Instagram / Facebook message overload because everything is clear on the site.
+	•	Primary button:
+	•	Text: „Kérj ingyenes konzultációt”
+	•	Scrolls to contact section.
+	•	Secondary button (ghost style):
+	•	Text: „Nézd meg, miben tudok segíteni”
+	•	Scrolls to services section.
+
+2) Rövid bemutatkozás – „Ki vagyok?”
+	•	Section title: „Ki vagyok és mivel foglalkozom?”
+	•	Short Hungarian paragraph (4–6 mondat) about:
+	•	He designs and builds egyedi weboldalakat és webshopokat.
+	•	He works especially with kézműves márkák, ékszerkészítők, kreatív vállalkozók, szolgáltatók.
+	•	He focuses on: átlátható felépítés, gyors betöltés, jó felhasználói élmény, konverzió, SEO alapok.
+	•	Add a small “info card” with bullet points like:
+	•	„Egyéni vállalkozó, rugalmas együttműködés”
+	•	„Nem csak dizájn – technikailag is összerakom az oldalt”
+	•	„Segítek szövegben, struktúrában, ötletekben is”
+
+3) „Miben segítek?” – Szolgáltatások
+	•	Section title: „Miben tudok segíteni?”
+	•	Use 3–4 service cards, each with:
+	•	Short Hungarian title,
+	•	2–4 bullet point description,
+	•	Optional small icon.
+	•	Suggested service cards:
+	1.	„Webshop készítés kézműves márkáknak”
+	•	Kevesebb Insta/FB üzenet – a vevők az oldalon megtalálnak minden infót.
+	•	Termékoldalak, kosár, rendelési folyamat.
+	•	Mobilra optimalizált, gyors, átlátható felépítés.
+	2.	„Bemutatkozó oldalak és sales page-ek”
+	•	Egyoldalas oldalak, amik eladják a szolgáltatásod.
+	•	Strukturált tartalom: headline, sztori, ajánlat, vélemények, kapcsolat.
+	•	Ideális link hirdetéshez, bio linkhez, bemutatkozáshoz.
+	3.	„SEO alapok és Google-jelenlét”
+	•	Kulcsszó-kutatás alap szinten.
+	•	Olyan szöveg és struktúra, amit a Google is ért.
+	•	Meta címek, leírások, technikai alapok.
+	4.	„Karbantartás és fejlesztés”
+	•	Már meglévő oldalak csinosítása, gyorsítása.
+	•	Új szekciók, funkciók, átalakítások.
+
+4) „Miért jó velem dolgozni?” – Pain pointokra építve
+	•	Section title: „Miért jó velem dolgozni?”
+	•	Use 3–5 highlighted benefit cards that speak directly to typical client pain points (in Hungarian). For example:
+	•	„Kevesebb üzenet, több szabad idő”
+	•	A vásárlók/ügyfelek egy helyen látják az árakat, infókat, folyamatot – kevesebb kérdés érkezik messengeren.
+	•	„Nem kell technikai gurunak lenned”
+	•	Az egész webes részt leveszem a válladról: domaintől a kész, használható oldalig.
+	•	„Olyan oldalad lesz, amit büszkén raksz ki a bioba”
+	•	Ha te is szívesen mutatod, az ügyfeleid is komolyabban vesznek.
+	•	„Weboldal, ami pénzt is termel”
+	•	Nem csak szép, hanem logikusan felépített, egyértelmű CTA-kkal, hogy a látogató tudja, mi a következő lépés.
+
+5) Mini „portfólió” / Példák
+	•	Section title: „Munkáimból”
+	•	Create 2–4 project cards (even if demo / generic names) with:
+	•	Projekt neve (pl. kézműves ékszer márka, kozmetikai szolgáltató, online oktató, stb. – használj magyar, de fiktív márkaneveket).
+	•	Rövid leírás (2–3 mondat) arról, mi volt a cél és hogyan segített a weboldal.
+	•	CTA link: „Nézd meg az oldalt” (use placeholder URLs).
+	•	Purpose: visually show that he already created stylish, modern, well-structured sites.
+
+6) Ajánlások / Social proof
+	•	Section title: „Visszajelzések”
+	•	2–3 rövid, hiteles hangú ajánlás magyarul (fiktív lehet, de valószerű).
+	•	Mindegyiknél:
+	•	Név (pl. „Kitti, kézműves ékszerkészítő”)
+	•	1–2 mondatos vélemény arról, hogy:
+	•	kevesebb üzenetet kap,
+	•	az oldal segít profibbnak tűnni,
+	•	gördülékeny volt az együttműködés.
+
+7) Munkafolyamat – „Hogyan dolgozom?”
+	•	Section title: „Hogyan dolgozom?”
+	•	3–4 lépés timeline-szerűen, pl.:
+	1.	Ingyenes konzultáció – rövid beszélgetés, célok, igények.
+	2.	Koncepció és vázlat – szerkezet, oldalterv, szövegötletek.
+	3.	Dizájn + fejlesztés – elkészül a weboldal, tesztelés mobilon és gépen.
+	4.	Átadás és finomhangolás – betanítás, módosítások, indulás.
+
+8) Kontakt / CTA blokk
+	•	Section title: „Beszéljünk az oldaladról”
+	•	Short paragraph in Hungarian inviting them to reach out even if they only want to see what’s possible.
+	•	Include:
+	•	Email cím (use placeholder: „hello@szecszkozoltan.hu”).
+	•	Gomb: „Írj üzenetet” – this can open a simple contact form (Név, Email, Üzenet).
+	•	Optional note:
+	•	„Szívesen készítek egy demó ötletet a saját márkádra szabva, kötelezettség nélkül.”
+
+Technical & content requirements
+	•	Use semantic HTML structure (H1–H3, lists, buttons).
+	•	All text must be real Hungarian copy, no lorem ipsum.
+	•	Make sure CTAs stand out visually and appear several times on the page.
+	•	The design and copy together should clearly communicate:
+„Ha a saját oldalam így néz ki, pontosan ilyen gondossággal készítem el a te weboldaladat is.”
+
+Generate the full one-page layout (HTML structure + section content) according to this spec.
