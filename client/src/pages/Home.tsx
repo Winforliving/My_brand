@@ -66,7 +66,8 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <button onClick={() => scrollToSection('about')} className="hover:text-foreground transition-colors">Rólam</button>
-            <button onClick={() => scrollToSection('services')} className="hover:text-foreground transition-colors">Tapasztalat</button>
+            <button onClick={() => scrollToSection('services')} className="hover:text-foreground transition-colors">Szolgáltatások</button>
+            <button onClick={() => scrollToSection('pricing')} className="hover:text-foreground transition-colors">Árazás</button>
             <button onClick={() => scrollToSection('portfolio')} className="hover:text-foreground transition-colors">Munkáim</button>
             <button onClick={() => scrollToSection('contact')} className="hover:text-foreground transition-colors">Kapcsolat</button>
           </div>
@@ -89,7 +90,7 @@ export default function Home() {
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mb-12">
-              Szia! Balogh Ferenc vagyok, Designer és Webfejlesztő. Célom, hogy az elképzeléseidet hatásos digitális megoldásokká alakítsam.
+              Szia! Balogh Ferenc vagyok, Backend és Frontend fejlesztő. Mindent kódolok, soha nem használok templateket. Tökéletesen rá szabom az oldalt a te márkádra, színeidre, stílusodra. Nincs előre akadály – bármit meg tudok csinálni. És gyorsan dolgozom.
             </p>
 
             {/* Ask me anything Input */}
@@ -166,10 +167,10 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">Ki vagyok és mivel foglalkozom?</h2>
               <div className="prose prose-lg text-muted-foreground">
                 <p>
-                  Balogh Ferenc vagyok, és egyedi weboldalakat, illetve webshopokat tervezek és építek. Kifejezetten olyan kreatív vállalkozókkal, kézműves márkákkal és szolgáltatókkal szeretek együtt dolgozni, akiknek fontos az igényes megjelenés.
+                  Balogh Ferenc vagyok, Backend és Frontend fejlesztő. Egyedi weboldalakat és webshopokat készítek, mindent kódolok, soha nem használok templateket. Minden projekt tökéletesen rá van szabva a te márkádra, színeidre, stílusodra.
                 </p>
                 <p>
-                  Nem hiszek a sablonmegoldásokban. A célom mindig az, hogy olyan oldalt kapj, ami átlátható, gyorsan betölt, és ami a legfontosabb: <strong>elad helyetted</strong>. Figyelek a felhasználói élményre és a keresőoptimalizálás (SEO) alapjaira is, hogy ne csak szép legyen az oldalad, hanem meg is találják.
+                  Nincs előre akadály – bármit meg tudok csinálni. Gyorsan dolgozom, és kétféle módon is dolgozhatunk: vagy megkereslek téged egy demo oldallal, amit rá szabok a te márkádra, vagy te keresel meg, és közvetlenül készítem el az oldalt. A célom mindig az, hogy olyan oldalt kapj, ami átlátható, gyorsan betölt, és ami a legfontosabb: <strong>elad helyetted</strong>.
                 </p>
               </div>
             </div>
@@ -183,10 +184,10 @@ export default function Home() {
                 </h3>
                 <ul className="space-y-3">
                   {[
-                    "Egyéni vállalkozó, rugalmas együttműködés",
-                    "Nem csak dizájn – technikailag is összerakom",
-                    "Segítek szövegben és struktúrában is",
-                    "Közvetlen kommunikáció, nincs 'ügynökségi' sallang"
+                    "Backend és Frontend fejlesztés – mindent kódolok",
+                    "Soha nem használok templateket, minden egyedi",
+                    "Tökéletesen rá szabom a te márkádra, színeidre",
+                    "Nincs előre akadály – bármit meg tudok csinálni"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-gray-700 font-medium">
                       <Check className="h-4 w-4 text-black mt-1 shrink-0" />
@@ -258,6 +259,183 @@ export default function Home() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 bg-secondary/30">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <span className="text-primary font-semibold tracking-wider uppercase text-sm">Árazás</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Kiszámítható árak – nem meglepetés</h2>
+            <p className="text-muted-foreground">
+              Minden projekt egyedi, de nem szeretem a „majd meglátjuk, mennyi lesz” típusú ajánlatokat. 
+              Ezért van néhány jól érthető csomagom, iránymutató árakkal, amikből látod, hogy milyen nagyságrendben gondolkodom.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Package 1: One-Page */}
+            <Card className="bg-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl mb-2">Kezdő lendület</CardTitle>
+                <CardDescription className="text-base mb-4">One-Page bemutatkozó</CardDescription>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-foreground">180.000</span>
+                  <span className="text-muted-foreground">Ft-tól</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Ha most építed az online jelenlétedet, és egy igényes, mobilbarát, egyoldalas weboldalra van szükséged, ami elmondja, ki vagy és mit csinálsz.
+                </p>
+                <Separator />
+                <ul className="space-y-3">
+                  {[
+                    "Modern, reszponzív dizájn",
+                    "Átlátható szerkezet (hero, bemutatkozás, szolgáltatások, vélemények, kapcsolat)",
+                    "Alap SEO beállítások",
+                    "Jogi oldalak (impresszum, adatkezelés)"
+                  ].map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm">
+                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Package 2: Mini Webshop */}
+            <Card className="bg-card border-primary/50 hover:border-primary transition-all duration-300 hover:shadow-xl relative overflow-hidden scale-105">
+              <div className="absolute top-0 left-0 w-full h-2 bg-primary" />
+              <div className="absolute top-4 right-4">
+                <Badge className="bg-primary text-primary-foreground">Népszerű</Badge>
+              </div>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl mb-2">Első webshop</CardTitle>
+                <CardDescription className="text-base mb-4">Mini webáruház</CardDescription>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-foreground">320.000</span>
+                  <span className="text-muted-foreground">Ft-tól</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Ha eleged van abból, hogy minden rendelést üzenetben kell egyeztetned, és szeretnéd, hogy a vásárlók maguktól végigmenjenek a „mit, mennyiért, hogyan tudom megvenni?” folyamaton.
+                </p>
+                <Separator />
+                <ul className="space-y-3">
+                  {[
+                    "1 főoldal + terméklista + termékoldalak + kosár + rendelés",
+                    "20–30 termék feltöltése",
+                    "Szállítási és fizetési módok beállítása",
+                    "Alap SEO, jogi oldalak"
+                  ].map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm">
+                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Package 3: Pro Webshop */}
+            <Card className="bg-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl mb-2">Növekedésre kész</CardTitle>
+                <CardDescription className="text-base mb-4">Pro webshop</CardDescription>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold text-foreground">520.000</span>
+                  <span className="text-muted-foreground">Ft-tól</span>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Ha a webshop már nem csak „jó lenne”, hanem konkrétan bevételt és kampányokat szeretnél rá építeni.
+                </p>
+                <Separator />
+                <ul className="space-y-3">
+                  {[
+                    "Up to 50–100 termék és kategória-struktúra",
+                    "Kuponok, akciók, kapcsolódó termékek",
+                    "Blog/SEO-barát felépítés",
+                    "Konverzió-fókuszú finomhangolás"
+                  ].map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm">
+                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                      <span className="text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Maintenance Section */}
+          <div className="mt-16 max-w-4xl mx-auto">
+            <div className="bg-card border border-border rounded-2xl p-8">
+              <h3 className="text-2xl font-bold mb-6 text-center">Havi karbantartás és support</h3>
+              <p className="text-muted-foreground text-center mb-8">
+                Szeretnél úgy aludni, hogy tudod: az oldalad biztonságban van, frissül, és ha elromlik valami, nem neked kell fórumokat bújni?
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card className="bg-background border-border/50">
+                  <CardHeader>
+                    <CardTitle className="text-xl">Nyugodt háttér</CardTitle>
+                    <div className="flex items-baseline gap-2 mt-2">
+                      <span className="text-3xl font-bold text-foreground">15.000</span>
+                      <span className="text-muted-foreground">Ft / hó-tól</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <span>Technikai frissítések, backup</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <span>Uptime figyelés, alap biztonság</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <span>Havi 30 perc apró módosítás (szöveg, kép csere)</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+                <Card className="bg-background border-border/50">
+                  <CardHeader>
+                    <CardTitle className="text-xl">Növekedés</CardTitle>
+                    <div className="flex items-baseline gap-2 mt-2">
+                      <span className="text-3xl font-bold text-foreground">30.000</span>
+                      <span className="text-muted-foreground">Ft / hó-tól</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <span>Minden az alap csomagból</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <span>Havi 1 kisebb fejlesztés / új szekció</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                        <span>Havi SEO / analitika check, rövid javaslatokkal</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -444,9 +622,9 @@ export default function Home() {
             <div className="hidden md:block absolute top-8 left-0 w-full h-0.5 bg-border -z-10" />
 
             {[
-              { step: "01", title: "Konzultáció", desc: "Egy rövid beszélgetés, ahol átbeszéljük a céljaidat és az igényeidet." },
-              { step: "02", title: "Tervezés", desc: "Elkészítem a weboldal struktúráját és a szöveges vázlatot." },
-              { step: "03", title: "Fejlesztés", desc: "Felépítem az oldalt, beállítom a dizájnt és tesztelem mobilon." },
+              { step: "01", title: "Demo vagy közvetlen megkeresés", desc: "Vagy én kereslek meg egy demo oldallal, amit rá szabok a te márkádra, vagy te keresel meg, és közvetlenül készítem az oldalt." },
+              { step: "02", title: "Tervezés és egyeztetés", desc: "Átbeszéljük a célokat, elkészítem a struktúrát és a szöveges vázlatot." },
+              { step: "03", title: "Fejlesztés", desc: "Kódolom az oldalt, beállítom a dizájnt, színeket, mindent rá szabok a te márkádra. Gyorsan dolgozom." },
               { step: "04", title: "Átadás", desc: "Megmutatom hogyan használd, és elindítjuk az új weboldaladat." }
             ].map((phase, i) => (
               <div key={i} className="bg-background pt-4 md:pt-0">
@@ -507,19 +685,23 @@ export default function Home() {
             {[
               {
                 q: "Mennyibe kerül egy weboldal?",
-                a: "Minden projekt egyedi, de általánosságban elmondható, hogy egy bemutatkozó oldal 150.000 Ft-tól, egy webshop 350.000 Ft-tól indul. Pontos árajánlatot a konzultáció után tudok adni."
+                a: "Árazás, ami kiszámítható – nem meglepetés. One-Page bemutatkozó oldal 180.000 Ft-tól, Mini webshop 320.000 Ft-tól, Pro webshop 520.000 Ft-tól. Minden projekt egyedi, de ezek az iránymutató árak, amikből látod, hogy milyen nagyságrendben gondolkodom."
               },
               {
                 q: "Mennyi idő alatt készül el?",
-                a: "A tartalom rendelkezésre állásától számítva egy egyszerűbb oldal 2-3 hét, egy komplexebb webshop 4-6 hét alatt készül el."
+                a: "Gyorsan dolgozom. A tartalom rendelkezésre állásától számítva egy egyszerűbb oldal 2-3 hét, egy komplexebb webshop 4-6 hét alatt készül el."
               },
               {
-                q: "Kell havidíjat fizetnem?",
-                a: "Nekem nem. A domain névnek (kb. 3000 Ft/év) és a tárhelynek (kb. 10-20.000 Ft/év) van díja, amit közvetlenül a szolgáltatónak fizetsz. Én segítek ezeket kiválasztani és beállítani."
+                q: "Van havidíj?",
+                a: "A karbantartásnak van havi díja, ha szeretnéd: 15.000-50.000 Ft/hó között, attól függ, hogy milyen szintű támogatást szeretnél. Az alap csomag (15.000 Ft/hó) tartalmazza a technikai frissítéseket, backup-ot, uptime figyelést és havi 30 perc apró módosítást."
               },
               {
-                q: "Tudom majd én is szerkeszteni az oldalt?",
-                a: "Igen! Olyan rendszert építek (általában WordPress vagy egyedi megoldás admin felülettel), amit te is könnyen tudsz kezelni. Az átadáskor betanítalak a használatára."
+                q: "Használsz templateket?",
+                a: "Soha nem használok templateket. Mindent kódolok, minden egyedi. Backend és Frontend fejlesztés, tökéletesen rá szabom a te márkádra, színeidre, stílusodra. Nincs előre akadály – bármit meg tudok csinálni."
+              },
+              {
+                q: "Hogyan dolgozol?",
+                a: "Kétféle módon: vagy megkereslek embereket, akiknek nincs oldaluk, és rájuk szabva készítek egy demo oldalt, amit megmutatok nekik – ha tetszik, övék. Vagy te keresel meg, és közvetlenül készítem el az oldalt."
               }
             ].map((faq, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="bg-card border border-border/50 rounded-xl px-6 shadow-sm">
@@ -541,7 +723,7 @@ export default function Home() {
               <div>
                 <h2 className="text-3xl md:text-5xl font-bold mb-6">Beszéljünk az oldaladról!</h2>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                  Akár konkrét elképzelésed van, akár csak érdeklődsz, írj bátran! Szívesen készítek egy demó ötletet a saját márkádra szabva, kötelezettség nélkül.
+                  Akár konkrét elképzelésed van, akár csak érdeklődsz, írj bátran! Kétféle módon dolgozhatunk: vagy megkereslek egy demo oldallal, amit rá szabok a te márkádra, vagy te keresel meg, és közvetlenül készítem el az oldalt. Mindkét esetben kötelezettség nélkül.
                 </p>
               </div>
 
