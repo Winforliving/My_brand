@@ -13,6 +13,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 
 // Assets
@@ -29,6 +31,7 @@ const contactFormSchema = z.object({
 export default function Home() {
   const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -51,6 +54,7 @@ export default function Home() {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+      setMobileMenuOpen(false);
     }
   };
 
@@ -64,7 +68,7 @@ export default function Home() {
             <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center text-background font-bold">B</div>
             Balogh Ferenc
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+          <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <button onClick={() => scrollToSection('services')} className="hover:text-foreground transition-colors">Szolgáltatások</button>
             <button onClick={() => scrollToSection('pricing')} className="hover:text-foreground transition-colors">Árazás</button>
             <button onClick={() => scrollToSection('portfolio')} className="hover:text-foreground transition-colors">Munkáim</button>
@@ -72,47 +76,84 @@ export default function Home() {
             <button onClick={() => scrollToSection('faq')} className="hover:text-foreground transition-colors">GYIK</button>
             <button onClick={() => scrollToSection('contact')} className="hover:text-foreground transition-colors">Kapcsolat</button>
           </div>
-          <Button onClick={() => scrollToSection('demo')} variant="default" size="sm" className="rounded-full px-6 font-medium">
-            Kérem az ingyenes demótervet
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button onClick={() => scrollToSection('demo')} variant="default" size="sm" className="hidden sm:flex rounded-full px-4 lg:px-6 font-medium text-xs lg:text-sm">
+              <span className="hidden lg:inline">Kérem az ingyenes demótervet</span>
+              <span className="lg:hidden">Demóterv</span>
+            </Button>
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild className="lg:hidden">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <nav className="flex flex-col gap-4 mt-8">
+                  <button onClick={() => scrollToSection('services')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    Szolgáltatások
+                  </button>
+                  <button onClick={() => scrollToSection('pricing')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    Árazás
+                  </button>
+                  <button onClick={() => scrollToSection('portfolio')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    Munkáim
+                  </button>
+                  <button onClick={() => scrollToSection('about')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    Rólam
+                  </button>
+                  <button onClick={() => scrollToSection('faq')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    GYIK
+                  </button>
+                  <button onClick={() => scrollToSection('contact')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    Kapcsolat
+                  </button>
+                  <div className="pt-4 border-t">
+                    <Button onClick={() => scrollToSection('demo')} variant="default" className="w-full rounded-full">
+                      Kérem az ingyenes demótervet
+                    </Button>
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </nav>
 
       {/* Hero Section (Minimalist) */}
-      <section className="relative pt-40 pb-20 px-6 overflow-hidden min-h-screen flex flex-col justify-center">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden min-h-[70vh] flex flex-col justify-center">
         {/* Top Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/20 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="container mx-auto max-w-6xl">
-          <div className="max-w-4xl mb-24">
-            <h1 className="text-6xl md:text-8xl font-bold leading-tight text-foreground mb-8 tracking-tight">
+          <div className="max-w-4xl mb-12 sm:mb-16">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-foreground mb-4 sm:mb-6 tracking-tight">
               Nem csak egy weboldal.<br />
               <span className="text-muted-foreground">Egy digitális rendszer, ami helyetted ad el.</span>
             </h1>
 
-            <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed mb-6">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-3 sm:mb-4">
               Full-stack fejlesztés sablonok nélkül. Gyors, biztonságos és 100%-ban a te vállalkozásodra szabott megoldások – felesleges korlátok nélkül.
             </p>
 
-            <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed mb-12">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed mb-8 sm:mb-12">
               Kérhetsz egy ingyenes demótervet: ha tetszik az irány, folytatjuk a munkát. Ha nem, nem került semmibe.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-12">
               <Button 
-                onClick={() => scrollToSection('contact')} 
+                onClick={() => scrollToSection('demo')} 
                 size="lg" 
-                className="rounded-full px-8 py-6 text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
+                className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
               >
                 Kérem az ingyenes Demótervet
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
               <Button 
                 onClick={() => scrollToSection('portfolio')} 
                 size="lg" 
                 variant="outline"
-                className="rounded-full px-8 py-6 text-lg font-medium border-2"
+                className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium border-2"
               >
                 Munkáim megtekintése
               </Button>
@@ -598,12 +639,12 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                image: "/emeraldian_webshop.png",
+                image: "/lilki_hero.png",
                 category: "Webshop",
-                title: "Emeraldian",
-                desc: "Prémium ékszer webshop elegáns, letisztult dizájnnal. A fókusz a prémium termékek bemutatásán és a gördülékeny vásárlói élményen volt.",
+                title: "Lilki",
+                desc: "Modern, letisztult webshop koncepció, amely a termékek bemutatására és a vásárlói élmény optimalizálására fókuszál. A dizájn egyensúlyt teremt a funkcionalitás és az esztétika között.",
                 tags: ["Design", "E-commerce", "Branding"],
-                fullTitle: "Emeraldian – webshop koncepció",
+                fullTitle: "Lilki – webshop koncepció",
                 demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
                 isItalic: true
               },
