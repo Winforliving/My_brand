@@ -34,7 +34,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Menu, ChevronDown, Globe } from "lucide-react";
 import { useState } from "react";
 
 // Assets
@@ -47,12 +48,24 @@ const contactFormSchema = z.object({
   email: z.string().email({ message: "Érvényes email címet adj meg." }),
   projectType: z.string().min(1, { message: "Kérlek válassz egy opciót." }),
   message: z.string().min(10, { message: "Az üzenet legalább 10 karakter legyen." }),
+  // Optional social media and website fields
+  website: z.string().refine((val) => !val || z.string().url().safeParse(val).success, {
+    message: "Érvényes URL-t adj meg.",
+  }).optional().or(z.literal("")),
+  facebook: z.string().optional().or(z.literal("")),
+  instagram: z.string().optional().or(z.literal("")),
+  linkedin: z.string().optional().or(z.literal("")),
+  twitter: z.string().optional().or(z.literal("")),
+  tiktok: z.string().optional().or(z.literal("")),
+  youtube: z.string().optional().or(z.literal("")),
+  pinterest: z.string().optional().or(z.literal("")),
 });
 
 export default function Home() {
   const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [socialMediaOpen, setSocialMediaOpen] = useState(false);
   const form = useForm<z.infer<typeof contactFormSchema>>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -60,16 +73,46 @@ export default function Home() {
       email: "",
       projectType: "",
       message: "",
+      website: "",
+      facebook: "",
+      instagram: "",
+      linkedin: "",
+      twitter: "",
+      tiktok: "",
+      youtube: "",
+      pinterest: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof contactFormSchema>) {
-    console.log(values);
-    toast({
-      title: "Üzenet elküldve!",
-      description: "Hamarosan felveszem veled a kapcsolatot.",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof contactFormSchema>) {
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Hiba történt az üzenet küldése során.");
+      }
+
+      toast({
+        title: "Üzenet elküldve!",
+        description: "Köszönöm! Hamarosan felveszem veled a kapcsolatot. Ha megadtad az online jelenléted, személyre szabott demót készítek neked.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      toast({
+        title: "Hiba történt",
+        description: error instanceof Error ? error.message : "Nem sikerült elküldeni az üzenetet. Kérlek próbáld újra.",
+        variant: "destructive",
+      });
+    }
   }
 
   const scrollToSection = (id: string) => {
@@ -179,7 +222,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-6 sm:mb-8"
             >
-              Egyedi weboldalakat és webshopokat készítek sablonok nélkül. Kérhetsz egy ingyenes demótervet – ha tetszik, folytatjuk. Ha nem, nem került semmibe.
+              Sablonok helyett egyedi, kézzel épített weboldalak és webshopok. Kérj egy ingyenes látványtervet a saját márkádra, kötelezettségek nélkül.
             </motion.p>
 
             {/* Social Proof & Trust Signals */}
@@ -189,16 +232,18 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
             >
-              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1">
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1 flex items-center gap-1">
+                <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+                Két kattintásos igénylés
+              </Badge>
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1 flex items-center gap-1">
+                <Check className="h-3 w-3 sm:h-4 sm:w-4" />
                 100% kockázatmentes
               </Badge>
-              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1">
-                Ingyenes demóterv
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1 flex items-center gap-1">
+                <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+                Válasz 24 órán belül
               </Badge>
-              <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1">
-                <Mail className="h-3 w-3 sm:h-4 sm:w-4" />
-                24 órán belül válaszolok
-              </span>
             </motion.div>
 
             {/* CTA Buttons */}
@@ -234,43 +279,38 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="space-y-6"
           >
-            <p className="text-sm text-muted-foreground uppercase tracking-widest font-medium text-center">Eszközök, amikkel dolgozom</p>
+            <p className="text-sm text-muted-foreground uppercase tracking-widest font-medium text-center">Amit garantálok</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Card 1: Figma */}
+              {/* Card 1: Unique Design */}
               <div className="bg-card/50 backdrop-blur-sm hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 group">
-                <div className="h-12 w-12 bg-[#F24E1E]/20 rounded-xl flex items-center justify-center mb-6 text-[#F24E1E] group-hover:scale-110 transition-transform duration-300">
+                <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
                   <PenTool className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Figma</h3>
+                <h3 className="text-xl font-bold text-white mb-2">Egyedi Tervezés</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  A vászon, ahol a tervezés történik – itt áll össze a weboldalad felépítése és vizuális világa.
+                  Nem használok sablonokat. Minden pixel pontosan a te márkádhoz és céljaidhoz igazodik.
                 </p>
               </div>
 
-              {/* Card 2: React & Tailwind */}
+              {/* Card 2: Fast Performance */}
               <div className="bg-card/50 backdrop-blur-sm hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 group">
-                <div className="flex gap-2 mb-6">
-                  <div className="h-12 w-12 bg-[#61DAFB]/20 rounded-xl flex items-center justify-center text-[#61DAFB] group-hover:scale-110 transition-transform duration-300">
-                    <Code className="h-6 w-6" />
-                  </div>
-                  <div className="h-12 w-12 bg-[#38B2AC]/20 rounded-xl flex items-center justify-center text-[#38B2AC] group-hover:scale-110 transition-transform duration-300 delay-75">
-                    <Layout className="h-6 w-6" />
-                  </div>
+                <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
+                  <Zap className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">React & Tailwind</h3>
+                <h3 className="text-xl font-bold text-white mb-2">Villámgyors Működés</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Modern, gyors és reszponzív felületek, amik minden eszközön szépen működnek.
+                  Azonnali betöltés mobilon és gépen is, hogy a látogatók ne forduljanak vissza.
                 </p>
               </div>
 
-              {/* Card 3: Backend */}
+              {/* Card 3: Stable Background */}
               <div className="bg-card/50 backdrop-blur-sm hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 group">
-                <div className="h-12 w-12 bg-[#777BB4]/20 rounded-xl flex items-center justify-center mb-6 text-[#777BB4] group-hover:scale-110 transition-transform duration-300">
+                <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
                   <Database className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">NodeJS & SQL</h3>
+                <h3 className="text-xl font-bold text-white mb-2">Stabil Háttér</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Stabil háttérrendszerek, amelyek biztonságosan és megbízhatóan kiszolgálják az oldalad és a webshopod.
+                  Biztonságos és bővíthető rendszer, ami éjjel-nappal megbízhatóan kiszolgálja a vevőidet.
                 </p>
               </div>
             </div>
@@ -449,6 +489,9 @@ export default function Home() {
           >
             <span className="text-primary font-semibold tracking-wider uppercase text-sm">Portfólió</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">Munkáimból</h2>
+            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+              Bár ezek demó projektek, pontosan ugyanezzel a gondossággal készítem el a te oldaladat is.
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -519,6 +562,19 @@ export default function Home() {
                 */}
               </motion.div>
             ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <h3 className="text-2xl font-bold mb-4">Tetszik ez a stílus?</h3>
+            <p className="text-muted-foreground mb-6">Kérj hasonlót a saját márkádra!</p>
+            <Button
+              onClick={() => scrollToSection('demo')}
+              size="lg"
+              className="rounded-full px-8 py-6 text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
+            >
+              Ingyenes demóterv kérése
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
@@ -600,7 +656,7 @@ export default function Home() {
                 name: "One-Page",
                 price: "180.000 Ft-tól",
                 desc: "Tökéletes bemutatkozó oldal induló vállalkozásoknak.",
-                features: ["Egyoldalas felépítés", "Bemutatkozás, Szolgáltatások", "Kapcsolati űrlap", "Mobilbarát design", "Alap SEO beállítás", "1 hónap támogatás"]
+                features: ["Egyoldalas felépítés", "Bemutatkozás, Szolgáltatások", "Kapcsolati űrlap", "Mobilbarát design", "Alap SEO beállítás", "Admin felület szövegszerkesztéshez", "1 hónap támogatás"]
               },
               {
                 name: "Mini Webshop",
@@ -644,8 +700,8 @@ export default function Home() {
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    <Button onClick={() => scrollToSection('contact')} className="w-full" variant={plan.popular ? "default" : "outline"}>
-                      Ajánlatot kérek
+                    <Button onClick={() => scrollToSection('demo')} className="w-full" variant={plan.popular ? "default" : "outline"}>
+                      Ehhez kérek demótervet
                     </Button>
                   </CardFooter>
                 </Card>
@@ -883,7 +939,7 @@ export default function Home() {
                 },
                 {
                   title: "2. Nem kell technikai gurunak lenned",
-                  desc: "A domaintől a kész oldalig mindent intézek. Neked csak a tartalmat kell jóváhagynod."
+                  desc: "A domaintől a kész oldalig mindent intézek. Átadás után pedig egy olyan egyszerű magyar nyelvű felületet kapsz, ahol te is bármikor átírhatsz szövegeket vagy feltölthetsz új képeket – programozói tudás nélkül."
                 },
                 {
                   title: "3. Olyan oldalad lesz, amit büszkén mutatsz",
@@ -956,45 +1012,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Lead Magnet Section (NEW) */}
-      <section className="py-20 bg-card border-y border-border relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div className="container mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto"
-          >
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <Badge className="mb-4 bg-accent text-accent-foreground hover:bg-accent/90">Ingyenes letöltés</Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">5 hiba, ami miatt pénzt veszítesz a webshopoddal</h2>
-                <p className="text-lg text-muted-foreground mb-8">
-                  Összeszedtem a leggyakoribb hibákat, amiket a legtöbb kezdő webshop elkövet. Töltsd le a listát, és ellenőrizd, hogy a te oldalad rendben van-e!
-                </p>
-                <form className="flex flex-col sm:flex-row gap-3">
-                  <Input placeholder="Email címed…" className="bg-white/90 text-foreground border-0 h-12" />
-                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-12 px-8 font-bold">
-                    Kérem a listát
-                  </Button>
-                </form>
-                <p className="text-xs mt-3 opacity-60">Kizárólag hasznos tartalmat küldök. Bármikor leiratkozhatsz.</p>
-              </div>
-              <div className="hidden md:flex justify-center">
-                <div className="relative w-64 h-80 bg-white rounded-lg shadow-2xl rotate-3 flex items-center justify-center text-primary font-bold text-2xl border-4 border-accent/50">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white to-gray-100 rounded-lg p-8 flex flex-col items-center justify-center text-center">
-                    <Zap className="h-16 w-16 text-accent mb-4" />
-                    CHECKLIST – Webshop Audit 2025
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Intro Section */}
       <section id="about" className="py-20 bg-secondary/30">
         <div className="container mx-auto px-6">
@@ -1006,8 +1023,10 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="space-y-6"
             >
-              <span className="text-primary font-semibold tracking-wider uppercase text-sm">Rólam</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground">Ki vagyok és mivel foglalkozom?</h2>
+              <div className="mb-2">
+                <span className="text-primary font-semibold tracking-wider uppercase text-sm">Rólam</span>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground">Ki vagyok és mivel foglalkozom?</h2>
+              </div>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p className="text-base">
                   Balogh Ferenc vagyok. Egyedi weboldalakat és webshopokat készítek, sablonok nélkül, mindent kódolva. Backend és frontend fejlesztőként dolgozom, de a fókusz nem a technikai részleteken van – hanem azon, hogy a te vállalkozásod hogyan növekedjen.
@@ -1075,7 +1094,7 @@ export default function Home() {
             {[
               {
                 q: "Miért jobb ez, mint a WordPress vagy Wix?",
-                a: "Mert nincs felesleges kód, ami lassítaná az oldalt. Biztonságosabb, mert nem függsz pluginoktól. És pontosan azt kapod, amire szükséged van, kompromisszumok nélkül."
+                a: "A WordPress oldalak gyakran lassúak, és folyamatosan frissíteni kell őket, hogy ne törjék fel. A Wix pedig havidíjas, és sosem lesz igazán a tiéd. Az általam írt kód örökre a tiéd marad, nincsenek kötelező havidíjak, villámgyorsan tölt be (amit a Google imád), és feltörhetetlenül biztonságos, mert nincsenek benne felesleges bővítmények."
               },
               {
                 q: "Mennyibe kerül egy weboldal?",
@@ -1096,6 +1115,10 @@ export default function Home() {
               {
                 q: "Hogyan dolgozol?",
                 a: "Kétféle módon: vagy megkereslek embereket, akiknek nincs oldaluk, és rájuk szabva készítek egy demo oldalt, amit megmutatok nekik – ha tetszik, övék. Vagy te keresel meg, és közvetlenül készítem el az oldalt."
+              },
+              {
+                q: "Mi történik, ha elkészíted a demót, de nekem mégsem tetszik?",
+                a: "Semmi gond. Megköszönöm a lehetőséget, és barátsággal elválunk. Nem tartozol semmivel, és az elkészült tervet sem használom fel máshol."
               }
             ].map((faq, i) => (
               <motion.div
@@ -1119,8 +1142,8 @@ export default function Home() {
         </div>
       </section>
       <section id="contact" className="py-24 bg-background text-foreground">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1130,29 +1153,41 @@ export default function Home() {
             >
               <div>
                 <h2 className="text-3xl md:text-5xl font-bold mb-6">Beszéljünk az oldaladról!</h2>
-                <p className="text-muted-foreground text-lg leading-relaxed">
-                  Akár demótervet kérsz, akár csak egy rövid, ingyenes konzultációt szeretnél az oldaladról, itt tudsz írni nekem. Dolgozhatunk úgy is, hogy én készítek egy demót a márkádra szabva, vagy úgy, hogy te keresel meg, és közösen tervezzük meg az első pillanattól. Mindkét esetben kötelezettség nélkül indulunk.
-                </p>
+                <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
+                  <p>
+                    Akár konkrét elképzelésed van, akár csak érdeklődsz, írj bátran! Dolgozhatunk úgy is, hogy én készítek egy demótervet a márkádra szabva, vagy úgy, hogy te hozod az ötletet, és közösen tervezzük meg az első pillanattól.
+                  </p>
+                  <p>
+                    Mindkét esetben kötelezettség nélkül indulunk.
+                  </p>
+                  <p>
+                    Ha megadod az online felületeid linkjeit (Instagram, Facebook, weboldal, Etsy, stb.), én átnézem őket, és ezek alapján készítek neked egy személyre szabott demótervet – nem kell semmit előkészítened, elég a link.
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Mail className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm opacity-70">Email cím</p>
-                    <p className="font-bold text-xl">hello@baloghferenc.hu</p>
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                      <Mail className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm opacity-70">Email cím</p>
+                      <p className="font-bold text-xl break-all sm:break-normal">hello@baloghferenc.hu</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Smartphone className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm opacity-70">Telefon</p>
-                    <p className="font-bold text-xl">+36 30 123 4567</p>
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                      <Smartphone className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <p className="text-sm opacity-70">Telefon</p>
+                      <p className="font-bold text-xl">+36 30 123 4567</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1160,16 +1195,17 @@ export default function Home() {
 
             <motion.div
               initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex justify-center w-full"
             >
-              <Card className="border-none shadow-2xl">
-                <CardHeader>
+              <Card className="border-none shadow-2xl w-full max-w-lg mx-auto">
+                <CardHeader className="px-5 sm:px-8 pt-8">
                   <CardTitle className="text-2xl text-foreground">Írj üzenetet</CardTitle>
                   <CardDescription>Általában 24 órán belül válaszolok.</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-5 sm:px-8 pb-8">
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                       <FormField
@@ -1238,6 +1274,191 @@ export default function Home() {
                           </FormItem>
                         )}
                       />
+                      
+                      {/* Online Presence Section */}
+                      <Collapsible open={socialMediaOpen} onOpenChange={setSocialMediaOpen} className="space-y-4">
+                        <CollapsibleTrigger className="flex items-start sm:items-center justify-between w-full text-left text-sm font-medium text-foreground hover:text-primary transition-colors gap-2">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span>Online jelenlét (opcionális)</span>
+                            <Badge variant="secondary" className="text-xs w-fit whitespace-normal text-left leading-tight">Segíts nekem egy személyre szabott demót készíteni</Badge>
+                          </div>
+                          <ChevronDown className={`h-4 w-4 shrink-0 mt-1 sm:mt-0 transition-transform duration-200 ${socialMediaOpen ? 'rotate-180' : ''}`} />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="space-y-4 pt-2">
+                          <p className="text-xs text-muted-foreground mb-4">
+                            Ha megadod a social media profiljaidat vagy weboldaladat, személyre szabottabb demót tudok készíteni a márkádra.
+                          </p>
+                          
+                          <FormField
+                            control={form.control}
+                            name="website"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-foreground flex items-center gap-2">
+                                  <Globe className="h-4 w-4" />
+                                  Weboldal URL
+                                </FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    placeholder="https://pelda.hu" 
+                                    {...field} 
+                                    className="bg-muted/30" 
+                                    type="url"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <FormField
+                              control={form.control}
+                              name="facebook"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <Facebook className="h-4 w-4" />
+                                    Facebook
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="facebook.com/username" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="instagram"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <Instagram className="h-4 w-4" />
+                                    Instagram
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="instagram.com/username" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="linkedin"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <Linkedin className="h-4 w-4" />
+                                    LinkedIn
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="linkedin.com/in/username" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="twitter"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <Twitter className="h-4 w-4" />
+                                    Twitter/X
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="x.com/username" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="tiktok"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <span className="text-sm font-bold">TikTok</span>
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="tiktok.com/@username" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="youtube"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <span className="text-sm font-bold">YouTube</span>
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="youtube.com/@channel" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="pinterest"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel className="text-foreground flex items-center gap-2">
+                                    <span className="text-sm font-bold">Pinterest</span>
+                                  </FormLabel>
+                                  <FormControl>
+                                    <Input 
+                                      placeholder="pinterest.com/username" 
+                                      {...field} 
+                                      className="bg-muted/30" 
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                      
                       <Button type="submit" className="w-full text-lg py-6 rounded-xl">
                         Üzenet küldése
                       </Button>
@@ -1247,6 +1468,45 @@ export default function Home() {
               </Card>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Lead Magnet Section (NEW) */}
+      <section className="py-20 bg-card border-y border-border relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="container mx-auto px-6 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto"
+          >
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <Badge className="mb-4 bg-accent text-accent-foreground hover:bg-accent/90">Ingyenes letöltés</Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">5 hiba, ami miatt pénzt veszítesz a webshopoddal</h2>
+                <p className="text-lg text-muted-foreground mb-8">
+                  Összeszedtem a leggyakoribb hibákat, amiket a legtöbb kezdő webshop elkövet. Töltsd le a listát, és ellenőrizd, hogy a te oldalad rendben van-e!
+                </p>
+                <form className="flex flex-col sm:flex-row gap-3">
+                  <Input placeholder="Email címed…" className="bg-white/90 text-foreground border-0 h-12" />
+                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-12 px-8 font-bold">
+                    Megnézem, mit rontok el
+                  </Button>
+                </form>
+                <p className="text-xs mt-3 opacity-60">Kizárólag hasznos tartalmat küldök. Bármikor leiratkozhatsz.</p>
+              </div>
+              <div className="hidden md:flex justify-center">
+                <div className="relative w-64 h-80 bg-white rounded-lg shadow-2xl rotate-3 flex items-center justify-center text-primary font-bold text-2xl border-4 border-accent/50">
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white to-gray-100 rounded-lg p-8 flex flex-col items-center justify-center text-center">
+                    <Zap className="h-16 w-16 text-accent mb-4" />
+                    CHECKLIST – Webshop Audit 2025
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
