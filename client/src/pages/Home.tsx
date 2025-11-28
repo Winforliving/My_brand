@@ -1,7 +1,26 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Check, ChevronDown, Code, Layout, Mail, MessageSquare, Monitor, Smartphone, Zap, Star, ExternalLink, Database, PenTool, GitBranch, Layers } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Code,
+  Layout,
+  MessageSquare,
+  Zap,
+  Mail,
+  Smartphone,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Star,
+  Settings,
+  Wand2,
+  ShoppingCart,
+  PenTool,
+  Database
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +31,7 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
@@ -25,6 +45,7 @@ import heroBg from "@assets/generated_images/minimalist_bright_home_office_works
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "A név legalább 2 karakter legyen." }),
   email: z.string().email({ message: "Érvényes email címet adj meg." }),
+  projectType: z.string().min(1, { message: "Kérlek válassz egy opciót." }),
   message: z.string().min(10, { message: "Az üzenet legalább 10 karakter legyen." }),
 });
 
@@ -37,6 +58,7 @@ export default function Home() {
     defaultValues: {
       name: "",
       email: "",
+      projectType: "",
       message: "",
     },
   });
@@ -70,8 +92,8 @@ export default function Home() {
           </div>
           <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <button onClick={() => scrollToSection('services')} className="hover:text-foreground transition-colors">Szolgáltatások</button>
-            <button onClick={() => scrollToSection('pricing')} className="hover:text-foreground transition-colors">Árazás</button>
             <button onClick={() => scrollToSection('portfolio')} className="hover:text-foreground transition-colors">Munkáim</button>
+            <button onClick={() => scrollToSection('pricing')} className="hover:text-foreground transition-colors">Árazás</button>
             <button onClick={() => scrollToSection('about')} className="hover:text-foreground transition-colors">Rólam</button>
             <button onClick={() => scrollToSection('faq')} className="hover:text-foreground transition-colors">GYIK</button>
             <button onClick={() => scrollToSection('contact')} className="hover:text-foreground transition-colors">Kapcsolat</button>
@@ -92,11 +114,11 @@ export default function Home() {
                   <button onClick={() => scrollToSection('services')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
                     Szolgáltatások
                   </button>
-                  <button onClick={() => scrollToSection('pricing')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
-                    Árazás
-                  </button>
                   <button onClick={() => scrollToSection('portfolio')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
                     Munkáim
+                  </button>
+                  <button onClick={() => scrollToSection('pricing')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
+                    Árazás
                   </button>
                   <button onClick={() => scrollToSection('about')} className="text-left text-lg font-medium hover:text-primary transition-colors py-2">
                     Rólam
@@ -119,54 +141,104 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section (Minimalist) */}
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden min-h-[70vh] flex flex-col justify-center">
-        {/* Top Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/20 blur-[120px] rounded-full pointer-events-none" />
+      {/* Hero Section (Animated & Dynamic) */}
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden min-h-[85vh] flex flex-col justify-center">
+        {/* Dynamic Background Glow */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-accent/20 blur-[120px] rounded-full pointer-events-none"
+        />
 
-        <div className="container mx-auto max-w-6xl">
+        <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[400px] bg-secondary/20 blur-[100px] rounded-full pointer-events-none" />
+
+        <div className="container mx-auto max-w-6xl relative z-10">
           <div className="max-w-4xl mb-12 sm:mb-16">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-foreground mb-4 sm:mb-6 tracking-tight">
-              Nem csak egy weboldal.<br />
-              <span className="text-muted-foreground">Egy digitális rendszer, ami helyetted ad el.</span>
-            </h1>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-foreground mb-4 sm:mb-6 tracking-tight">
+                Nem csak egy weboldal.<br />
+                <span className="text-muted-foreground">Egy digitális rendszer, ami helyetted ad el.</span>
+              </h1>
+            </motion.div>
 
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-3 sm:mb-4">
-              Full-stack fejlesztés sablonok nélkül. Gyors, biztonságos és 100%-ban a te vállalkozásodra szabott megoldások – felesleges korlátok nélkül.
-            </p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-6 sm:mb-8"
+            >
+              Egyedi weboldalakat és webshopokat készítek sablonok nélkül. Kérhetsz egy ingyenes demótervet – ha tetszik, folytatjuk. Ha nem, nem került semmibe.
+            </motion.p>
 
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed mb-8 sm:mb-12">
-              Kérhetsz egy ingyenes demótervet: ha tetszik az irány, folytatjuk a munkát. Ha nem, nem került semmibe.
-            </p>
+            {/* Social Proof & Trust Signals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
+            >
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1">
+                100% kockázatmentes
+              </Badge>
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1">
+                Ingyenes demóterv
+              </Badge>
+              <span className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1">
+                <Mail className="h-3 w-3 sm:h-4 sm:w-4" />
+                24 órán belül válaszolok
+              </span>
+            </motion.div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-12">
-              <Button 
-                onClick={() => scrollToSection('demo')} 
-                size="lg" 
-                className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-12"
+            >
+              <Button
+                onClick={() => scrollToSection('demo')}
+                size="lg"
+                className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105"
               >
-                Kérem az ingyenes Demótervet
+                Ingyenes demóterv
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
-              <Button 
-                onClick={() => scrollToSection('portfolio')} 
-                size="lg" 
+              <Button
+                onClick={() => scrollToSection('portfolio')}
+                size="lg"
                 variant="outline"
-                className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium border-2"
+                className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium border-2 hover:bg-secondary/50 transition-all duration-300"
               >
                 Munkáim megtekintése
               </Button>
-            </div>
+            </motion.div>
           </div>
 
           {/* Foundations Grid */}
-          <div className="space-y-6">
-            <p className="text-sm text-muted-foreground uppercase tracking-widest font-medium">Eszközök, amikkel dolgozom</p>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="space-y-6"
+          >
+            <p className="text-sm text-muted-foreground uppercase tracking-widest font-medium text-center">Eszközök, amikkel dolgozom</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Card 1: Figma */}
-              <div className="bg-card hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-colors group">
-                <div className="h-12 w-12 bg-[#F24E1E]/20 rounded-xl flex items-center justify-center mb-6 text-[#F24E1E]">
+              <div className="bg-card/50 backdrop-blur-sm hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 group">
+                <div className="h-12 w-12 bg-[#F24E1E]/20 rounded-xl flex items-center justify-center mb-6 text-[#F24E1E] group-hover:scale-110 transition-transform duration-300">
                   <PenTool className="h-6 w-6" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Figma</h3>
@@ -176,12 +248,12 @@ export default function Home() {
               </div>
 
               {/* Card 2: React & Tailwind */}
-              <div className="bg-card hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-colors group">
+              <div className="bg-card/50 backdrop-blur-sm hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 group">
                 <div className="flex gap-2 mb-6">
-                  <div className="h-12 w-12 bg-[#61DAFB]/20 rounded-xl flex items-center justify-center text-[#61DAFB]">
+                  <div className="h-12 w-12 bg-[#61DAFB]/20 rounded-xl flex items-center justify-center text-[#61DAFB] group-hover:scale-110 transition-transform duration-300">
                     <Code className="h-6 w-6" />
                   </div>
-                  <div className="h-12 w-12 bg-[#38B2AC]/20 rounded-xl flex items-center justify-center text-[#38B2AC]">
+                  <div className="h-12 w-12 bg-[#38B2AC]/20 rounded-xl flex items-center justify-center text-[#38B2AC] group-hover:scale-110 transition-transform duration-300 delay-75">
                     <Layout className="h-6 w-6" />
                   </div>
                 </div>
@@ -192,8 +264,8 @@ export default function Home() {
               </div>
 
               {/* Card 3: Backend */}
-              <div className="bg-card hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-colors group">
-                <div className="h-12 w-12 bg-[#777BB4]/20 rounded-xl flex items-center justify-center mb-6 text-[#777BB4]">
+              <div className="bg-card/50 backdrop-blur-sm hover:bg-card/80 border border-white/5 p-8 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 group">
+                <div className="h-12 w-12 bg-[#777BB4]/20 rounded-xl flex items-center justify-center mb-6 text-[#777BB4] group-hover:scale-110 transition-transform duration-300">
                   <Database className="h-6 w-6" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">NodeJS & SQL</h3>
@@ -202,187 +274,400 @@ export default function Home() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Services Section */}
       <section id="services" className="py-24 px-6">
         <div className="container mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-2xl mx-auto mb-16"
+          >
             <span className="text-primary font-semibold tracking-wider uppercase text-sm">Szolgáltatások</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Miben tudok segíteni?</h2>
             <p className="text-muted-foreground">Komplex megoldások, hogy neked csak a vállalkozásoddal kelljen foglalkoznod.</p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: <MessageSquare className="h-6 w-6" />,
-                title: "Automata Értékesítési Rendszer (Webshop)",
-                desc: "Kézműves márkáknak és kisvállalkozásoknak, akik eddig üzenetben intézték a rendeléseket.",
-                features: ["Termékoldalak, kosár, rendelési folyamat", "Automata visszaigazolások", "Kevesebb DM – a vevők maguktól találnak meg mindent"]
-              },
-              {
-                icon: <Layout className="h-6 w-6" />,
-                title: "Márkaépítő Weboldal",
-                desc: "Egy- vagy többoldalas weboldalak, amik eladják a szolgáltatásod.",
-                features: ["Strukturált tartalom, érthető felépítés", "Sales-fókuszú logika, egyértelmű gombok", "Tökéletes link hirdetésekhez vagy bio-ba"]
-              },
-              {
-                icon: <Zap className="h-6 w-6" />,
-                title: "SEO alapok",
-                desc: "Hogy a Google és a vásárlóid is könnyen megtaláljanak.",
-                features: ["Technikai beállítások", "Kulcsszó-alapú szövegstruktúra", "Meta adatok beállítása"]
-              },
-              {
-                icon: <Code className="h-6 w-6" />,
-                title: "Karbantartás",
-                desc: "Ha már van oldalad, de ráfér egy frissítés vagy gyorsítás.",
-                features: ["Gyorsítás & optimalizálás", "Új funkciók fejlesztése", "Hibajavítás"]
-              }
-            ].map((service, i) => (
-              <Card key={i} className="group hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 transition-all duration-500 border-white/5 bg-card hover:bg-white/5 overflow-hidden relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <Card className="h-full group hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 transition-all duration-500 border-white/5 bg-card hover:bg-white/5 overflow-hidden relative">
                 <div className="absolute top-0 left-0 w-1 h-full bg-accent scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
                 <CardHeader>
                   <div className="h-14 w-14 rounded-2xl bg-white/5 text-white flex items-center justify-center mb-4 group-hover:bg-accent group-hover:text-white transition-colors duration-300 shadow-inner">
-                    {service.icon}
+                    <Layout className="h-6 w-6" />
                   </div>
-                  <CardTitle className="text-xl mb-2 text-white group-hover:text-accent transition-colors">{service.title}</CardTitle>
-                  <CardDescription className="text-base leading-relaxed text-muted-foreground group-hover:text-white/80 transition-colors">{service.desc}</CardDescription>
+                  <CardTitle className="text-xl mb-2 text-white group-hover:text-accent transition-colors">Bemutatkozó oldalak, amik eladnak</CardTitle>
+                  <CardDescription className="text-base leading-relaxed text-muted-foreground group-hover:text-white/80 transition-colors">Egyedi tervezésű landing page-ek és céges weboldalak, amik a látogatókból érdeklődőket csinálnak.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Separator className="mb-4 bg-white/10" />
                   <ul className="space-y-3">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
-                        <div className="h-1.5 w-1.5 rounded-full bg-accent" />
-                        {feature}
-                      </li>
-                    ))}
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      SEO optimalizált szerkezet
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Villámgyors betöltés
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Mobilbarát kialakítás
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Card className="h-full group hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 transition-all duration-500 border-white/5 bg-card hover:bg-white/5 overflow-hidden relative">
+                <div className="absolute top-0 left-0 w-1 h-full bg-accent scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+                <CardHeader>
+                  <div className="h-14 w-14 rounded-2xl bg-white/5 text-white flex items-center justify-center mb-4 group-hover:bg-accent group-hover:text-white transition-colors duration-300 shadow-inner">
+                    <ShoppingCart className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl mb-2 text-white group-hover:text-accent transition-colors">Webshopok, amik termelik a pénzt</CardTitle>
+                  <CardDescription className="text-base leading-relaxed text-muted-foreground group-hover:text-white/80 transition-colors">Stabil, biztonságos és könnyen kezelhető webshopok, egyedi funkciókkal és admin felülettel.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Separator className="mb-4 bg-white/10" />
+                  <ul className="space-y-3">
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Termékfeltöltés és kezelés
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Fizetési és szállítási integrációk
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Kuponok, akciók, kapcsolódó termékek
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <Card className="h-full group hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 transition-all duration-500 border-white/5 bg-card hover:bg-white/5 overflow-hidden relative">
+                <div className="absolute top-0 left-0 w-1 h-full bg-accent scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+                <CardHeader>
+                  <div className="h-14 w-14 rounded-2xl bg-white/5 text-white flex items-center justify-center mb-4 group-hover:bg-accent group-hover:text-white transition-colors duration-300 shadow-inner">
+                    <Settings className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl mb-2 text-white group-hover:text-accent transition-colors">Karbantartás és SEO</CardTitle>
+                  <CardDescription className="text-base leading-relaxed text-muted-foreground group-hover:text-white/80 transition-colors">Hogy az oldalad mindig naprakész, gyors és megtalálható legyen a Google-ben.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Separator className="mb-4 bg-white/10" />
+                  <ul className="space-y-3">
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Technikai frissítések és backup
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Uptime figyelés és biztonság
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Alap SEO beállítások és optimalizálás
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Card className="h-full group hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 transition-all duration-500 border-white/5 bg-card hover:bg-white/5 overflow-hidden relative">
+                <div className="absolute top-0 left-0 w-1 h-full bg-accent scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+                <CardHeader>
+                  <div className="h-14 w-14 rounded-2xl bg-white/5 text-white flex items-center justify-center mb-4 group-hover:bg-accent group-hover:text-white transition-colors duration-300 shadow-inner">
+                    <Wand2 className="h-6 w-6" />
+                  </div>
+                  <CardTitle className="text-xl mb-2 text-white group-hover:text-accent transition-colors">Egyedi fejlesztések</CardTitle>
+                  <CardDescription className="text-base leading-relaxed text-muted-foreground group-hover:text-white/80 transition-colors">Ha van egy egyedi ötleted, amit meg szeretnél valósítani, én segítek benne.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Separator className="mb-4 bg-white/10" />
+                  <ul className="space-y-3">
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Integrációk külső rendszerekkel
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Egyedi funkciók fejlesztése
+                    </li>
+                    <li className="text-sm text-muted-foreground flex items-center gap-3 group-hover:text-white/70 transition-colors">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      Konzultáció és tanácsadás
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Portfolio Section */}
+      <section id="portfolio" className="py-24 bg-background">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <span className="text-primary font-semibold tracking-wider uppercase text-sm">Portfólió</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2">Munkáimból</h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                image: "/lilki_hero.png",
+                category: "Webshop",
+                title: "Lilki",
+                desc: "Modern, letisztult webshop koncepció.",
+                fullDesc: "Modern, letisztult webshop koncepció, amely a termékek bemutatására és a vásárlói élmény optimalizálására fókuszál.",
+                tags: ["Design", "E-commerce", "Branding"],
+                fullTitle: "Lilki – webshop koncepció",
+                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
+                isItalic: true
+              },
+              {
+                image: "/ymolit_hero.png",
+                category: "Kézműves webshop",
+                title: "Ymolit",
+                desc: "Kézműves termékek webshopja természetes anyagokkal.",
+                fullDesc: "Kézműves termékek webshopja, amely a természetes anyagok és az egyedi készítés szépségét emeli ki.",
+                tags: ["E-commerce", "Design", "Branding"],
+                fullTitle: "Ymolit – kézműves webshop koncepció",
+                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
+                isItalic: false
+              },
+              {
+                image: "/babacsillag_hero.png",
+                category: "Márkaoldal + shop",
+                title: "Babacsillag",
+                desc: "Természetes hatású dizájn, mobilra optimalizálva.",
+                fullDesc: "Természetes hatású dizájn, ami tükrözi a márka értékeit. Mobilra optimalizált, egyszerű vásárlási folyamattal.",
+                tags: ["UI/UX", "Next.js", "SEO"],
+                fullTitle: "Babacsillag – márkaoldal + shop koncepció",
+                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
+                isItalic: true
+              }
+            ].map((project, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer" onClick={() => setSelectedImage(project.image)}>
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col items-center justify-center text-center p-6 duration-300">
+                    <h3 className="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">{project.title}</h3>
+                    <p className="text-primary font-medium mb-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">{project.category}</p>
+                    <p className="text-white/80 text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100 mb-2 line-clamp-3">{project.fullDesc}</p>
+                    <p className={`text-white/60 text-xs translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-125 mb-4 ${project.isItalic ? 'italic' : ''}`}>{project.demoText || "Demó projekt – általam készített, nem megrendelt koncepció"}</p>
+                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">
+                      <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 hover:bg-white/20 transition-colors">
+                        Megnézem
+                      </span>
+                    </div>
+                  </div>
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                  />
+                </div>
+                {/* Mobile-only details shown below image for better readability on small screens if needed, 
+                    but sticking to the requested design which was overlay-based. 
+                    Adding a small caption below for mobile could be good, but user asked for "olyan mint amilyenre csinaltad" (like you made it).
+                    The previous design had NO text below. I will stick to that. 
+                */}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-24 bg-secondary/30">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold">Visszajelzések</h2>
+            <p className="text-muted-foreground mt-2">Akikkel már együtt dolgoztam</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                text: "Végre nem kell egész nap az Instán válaszolgatnom az árakkal kapcsolatban! A webshopom automatikusan kezeli a rendeléseket, én pedig tudok az ékszerekre koncentrálni.",
+                author: "Kitti",
+                role: "kézműves ékszerkészítő"
+              },
+              {
+                text: "Feri nem csak megcsinálta, amit kértem, hanem jobb ötleteket is hozott. Az oldal sokkal profibb lett, mint amit elképzeltem, és a vevőim is imádják.",
+                author: "Péter",
+                role: "asztalos manufaktúra"
+              },
+              {
+                text: "Féltem a technikai részektől, de Feri mindent elintézett. Türelmesen elmagyarázta, hogyan tudom később én is szerkeszteni az oldalt. Csak ajánlani tudom!",
+                author: "Eszter",
+                role: "jógaoktató"
+              }
+            ].map((testimonial, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <Card className="bg-background border-none shadow-sm h-full">
+                  <CardContent className="pt-6">
+                    <div className="flex gap-1 text-yellow-400 mb-4">
+                      {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 fill-current" />)}
+                    </div>
+                    <p className="text-muted-foreground mb-6 italic leading-relaxed">"{testimonial.text}"</p>
+                    <div>
+                      <p className="font-bold text-foreground">{testimonial.author}</p>
+                      <p className="text-xs text-primary">{testimonial.role}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24 bg-secondary/30">
+      <section id="pricing" className="py-24 bg-secondary/20">
         <div className="container mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-primary font-semibold tracking-wider uppercase text-sm">Árazás</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Kiszámítható árak – nem meglepetés</h2>
-            <p className="text-muted-foreground">
-              Minden projekt egyedi, de nem szeretem a „majd meglátjuk, mennyi lesz” típusú ajánlatokat. 
-              Ezért van néhány jól érthető csomagom, iránymutató árakkal, amikből látod, hogy milyen nagyságrendben gondolkodom.
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold">Egyszerű, átlátható árazás</h2>
+            <p className="text-muted-foreground mt-2">Nincsenek rejtett költségek. Azt kapod, amit megbeszélünk.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                name: "One-Page",
+                price: "180.000 Ft-tól",
+                desc: "Tökéletes bemutatkozó oldal induló vállalkozásoknak.",
+                features: ["Egyoldalas felépítés", "Bemutatkozás, Szolgáltatások", "Kapcsolati űrlap", "Mobilbarát design", "Alap SEO beállítás", "1 hónap támogatás"]
+              },
+              {
+                name: "Mini Webshop",
+                price: "320.000 Ft-tól",
+                desc: "Kisebb termékkínálattal rendelkező márkáknak.",
+                popular: true,
+                features: ["Főoldal + Termékoldalak", "Kosár és Pénztár folyamat", "Bankkártyás fizetés (Stripe/Barion)", "Számlázó összekötés (Számlázz.hu)", "Admin felület termékfeltöltéshez", "3 hónap támogatás"]
+              },
+              {
+                name: "Pro Webshop",
+                price: "520.000 Ft-tól",
+                desc: "Komplex igényekre, nagy forgalmú boltoknak.",
+                features: ["Korlátlan termékkategória", "Egyedi szűrőrendszer", "Hírlevél integráció", "Blog funkció", "Haladó SEO és Analytics", "6 hónap támogatás"]
+              }
+            ].map((plan, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <Card className={`relative h-full flex flex-col ${plan.popular ? 'border-primary shadow-lg shadow-primary/10 scale-105 z-10' : 'border-border'}`}>
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
+                      Legnépszerűbb
+                    </div>
+                  )}
+                  <CardHeader>
+                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                    <CardDescription>{plan.desc}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <div className="text-3xl font-bold mb-6">{plan.price}</div>
+                    <ul className="space-y-3">
+                      {plan.features.map((feature, j) => (
+                        <li key={j} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Check className="h-4 w-4 text-primary" /> {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button onClick={() => scrollToSection('contact')} className="w-full" variant={plan.popular ? "default" : "outline"}>
+                      Ajánlatot kérek
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-muted-foreground flex items-center justify-center gap-2">
+              <Check className="h-5 w-5 text-green-500" />
+              100% Elégedettségi Garancia: Ha nem tetszik a demó, nem fizetsz semmit.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Package 1: One-Page */}
-            <Card className="bg-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl mb-2">Kezdő lendület</CardTitle>
-                <CardDescription className="text-base mb-4">One-Page bemutatkozó</CardDescription>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-foreground">180.000</span>
-                  <span className="text-muted-foreground">Ft-tól</span>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Ha most építed az online jelenlétedet, és egy igényes, mobilbarát, egyoldalas weboldalra van szükséged, ami elmondja, ki vagy és mit csinálsz.
-                </p>
-                <Separator />
-                <ul className="space-y-3">
-                  {[
-                    "Modern, reszponzív dizájn",
-                    "Átlátható szerkezet (hero, bemutatkozás, szolgáltatások, vélemények, kapcsolat)",
-                    "Alap SEO beállítások",
-                    "Jogi oldalak (impresszum, adatkezelés)"
-                  ].map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm">
-                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Package 2: Mini Webshop */}
-            <Card className="bg-card border-primary/50 hover:border-primary transition-all duration-300 hover:shadow-xl relative overflow-hidden scale-105">
-              <div className="absolute top-0 left-0 w-full h-2 bg-primary" />
-              <div className="absolute top-4 right-4">
-                <Badge className="bg-primary text-primary-foreground">Népszerű</Badge>
-              </div>
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl mb-2">Első webshop</CardTitle>
-                <CardDescription className="text-base mb-4">Mini webáruház</CardDescription>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-foreground">320.000</span>
-                  <span className="text-muted-foreground">Ft-tól</span>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Ha eleged van abból, hogy minden rendelést üzenetben kell egyeztetned, és szeretnéd, hogy a vásárlók maguktól végigmenjenek a „mit, mennyiért, hogyan tudom megvenni?” folyamaton.
-                </p>
-                <Separator />
-                <ul className="space-y-3">
-                  {[
-                    "1 főoldal + terméklista + termékoldalak + kosár + rendelés",
-                    "20–30 termék feltöltése",
-                    "Szállítási és fizetési módok beállítása",
-                    "Alap SEO, jogi oldalak"
-                  ].map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm">
-                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Package 3: Pro Webshop */}
-            <Card className="bg-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl mb-2">Növekedésre kész</CardTitle>
-                <CardDescription className="text-base mb-4">Pro webshop</CardDescription>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-foreground">520.000</span>
-                  <span className="text-muted-foreground">Ft-tól</span>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Ha a webshop már nem csak „jó lenne”, hanem konkrétan bevételt és kampányokat szeretnél rá építeni.
-                </p>
-                <Separator />
-                <ul className="space-y-3">
-                  {[
-                    "Akár 50–100 termék és kategória-struktúra",
-                    "Kuponok, akciók, kapcsolódó termékek",
-                    "Blog- és SEO-barát felépítés",
-                    "Konverzió-fókuszú finomhangolás"
-                  ].map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm">
-                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-
           {/* Maintenance Section */}
-          <div className="mt-16 max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-16 max-w-4xl mx-auto"
+          >
             <div className="bg-card border border-border rounded-2xl p-8">
               <h3 className="text-2xl font-bold mb-6 text-center">Havi karbantartás és support</h3>
               <p className="text-muted-foreground text-center mb-8">
@@ -441,7 +726,7 @@ export default function Home() {
                 </Card>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -557,9 +842,9 @@ export default function Home() {
 
             {/* CTA Button */}
             <div className="text-center">
-              <Button 
-                onClick={() => scrollToSection('contact')} 
-                size="lg" 
+              <Button
+                onClick={() => scrollToSection('contact')}
+                size="lg"
                 className="rounded-full px-8 py-6 text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
               >
                 Kérem az ingyenes Demótervet
@@ -585,7 +870,7 @@ export default function Home() {
                 Tudom, hogy vállalkozóként ezer dolgod van. A célom, hogy a weboldalad ne egy újabb feladat legyen, hanem egy eszköz, ami leveszi a terhet a válladról.
               </p>
               <Button onClick={() => scrollToSection('contact')} variant="secondary" size="lg" className="rounded-full">
-                Kérem a Demo Tervemet
+                Kérem a demótervet
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
@@ -628,129 +913,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Portfolio Section */}
-      <section id="portfolio" className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-primary font-semibold tracking-wider uppercase text-sm">Portfólió</span>
-            <h2 className="text-3xl md:text-4xl font-bold mt-2">Munkáimból</h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                image: "/lilki_hero.png",
-                category: "Webshop",
-                title: "Lilki",
-                desc: "Modern, letisztult webshop koncepció, amely a termékek bemutatására és a vásárlói élmény optimalizálására fókuszál. A dizájn egyensúlyt teremt a funkcionalitás és az esztétika között.",
-                tags: ["Design", "E-commerce", "Branding"],
-                fullTitle: "Lilki – webshop koncepció",
-                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
-                isItalic: true
-              },
-              {
-                image: "/ymolit_hero.png",
-                category: "Kézműves webshop",
-                title: "Ymolit",
-                desc: "Kézműves termékek webshopja, amely a természetes anyagok és az egyedi készítés szépségét emeli ki. A fókusz a kézműves értékek bemutatásán és a vásárlói bizalom építésén volt.",
-                tags: ["E-commerce", "Design", "Branding"],
-                fullTitle: "Ymolit – kézműves webshop koncepció",
-                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
-                isItalic: false
-              },
-              {
-                image: "/babacsillag_hero.png",
-                category: "Márkaoldal + shop",
-                title: "Babacsillag",
-                desc: "Természetes hatású dizájn, ami tükrözi a márka értékeit. Mobilra optimalizált, egyszerű vásárlási folyamattal.",
-                tags: ["UI/UX", "Next.js", "SEO"],
-                fullTitle: "Babacsillag – márkaoldal + shop koncepció",
-                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
-                isItalic: true
-              }
-            ].map((project, i) => (
-              <div key={i} className="group flex flex-col h-full">
-                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 shadow-lg border border-border/50 group-hover:shadow-2xl transition-all duration-500 cursor-pointer" onClick={() => setSelectedImage(project.image)}>
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="bg-white/90 backdrop-blur px-6 py-3 rounded-full font-bold text-black transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 pointer-events-none">
-                      Megnézem
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-3 flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-3 py-1 rounded-full">{project.category}</span>
-                  </div>
-                  <h3 className="text-2xl font-bold group-hover:text-primary transition-colors">{project.fullTitle || project.title}</h3>
-                  <p className={`text-xs text-muted-foreground/70 ${project.isItalic ? 'italic' : ''}`}>{project.demoText || "Demó projekt – általam készített, nem megrendelt koncepció"}</p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{project.desc}</p>
-                  <div className="pt-2">
-                    <p className="text-xs text-muted-foreground">
-                      – {project.tags.join(" · ")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-24 bg-secondary/30">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold">Visszajelzések</h2>
-            <p className="text-muted-foreground mt-2">Akikkel már együtt dolgoztam</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {[
-              {
-                text: "Végre nem kell egész nap az Instán válaszolgatnom az árakkal kapcsolatban! A webshopom automatikusan kezeli a rendeléseket, én pedig tudok az ékszerekre koncentrálni.",
-                author: "Kitti",
-                role: "kézműves ékszerkészítő"
-              },
-              {
-                text: "Feri nem csak megcsinálta, amit kértem, hanem jobb ötleteket is hozott. Az oldal sokkal profibb lett, mint amit elképzeltem, és a vevőim is imádják.",
-                author: "Péter",
-                role: "asztalos manufaktúra"
-              },
-              {
-                text: "Féltem a technikai részektől, de Feri mindent elintézett. Türelmesen elmagyarázta, hogyan tudom később én is szerkeszteni az oldalt. Csak ajánlani tudom!",
-                author: "Eszter",
-                role: "jógaoktató"
-              }
-            ].map((testimonial, i) => (
-              <Card key={i} className="bg-background border-none shadow-sm">
-                <CardContent className="pt-6">
-                  <div className="flex gap-1 text-yellow-400 mb-4">
-                    {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 fill-current" />)}
-                  </div>
-                  <p className="text-muted-foreground mb-6 italic leading-relaxed">"{testimonial.text}"</p>
-                  <div>
-                    <p className="font-bold text-foreground">{testimonial.author}</p>
-                    <p className="text-xs text-primary">{testimonial.role}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Workflow */}
       <section className="py-24 px-6">
         <div className="container mx-auto">
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
             <span className="text-primary font-semibold tracking-wider uppercase text-sm">Munkafolyamat</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">Hogyan dolgozom?</h2>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-4 gap-8 relative">
             {/* Connecting line for desktop */}
@@ -762,13 +937,20 @@ export default function Home() {
               { step: "03", title: "Fejlesztés", desc: "Lekódolom az oldalt, beállítom a dizájnt, színeket, funkciókat. Minden a te márkádra szabva készül." },
               { step: "04", title: "Átadás", desc: "Megmutatom, hogyan használd, és elindítjuk az új weboldaladat vagy webshopodat." }
             ].map((phase, i) => (
-              <div key={i} className="bg-background pt-4 md:pt-0">
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-background pt-4 md:pt-0"
+              >
                 <div className="h-16 w-16 rounded-2xl bg-white border-2 border-white text-black font-bold text-xl flex items-center justify-center shadow-sm mb-6 mx-auto md:mx-0 relative z-10">
                   {phase.step}
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-center md:text-left">{phase.title}</h3>
                 <p className="text-muted-foreground text-center md:text-left">{phase.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -778,7 +960,13 @@ export default function Home() {
       <section className="py-20 bg-card border-y border-border relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-6 relative z-10">
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto"
+          >
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <Badge className="mb-4 bg-accent text-accent-foreground hover:bg-accent/90">Ingyenes letöltés</Badge>
@@ -803,7 +991,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -811,7 +999,13 @@ export default function Home() {
       <section id="about" className="py-20 bg-secondary/30">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto grid md:grid-cols-[1.5fr_1fr] gap-12 items-start">
-            <div className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-6"
+            >
               <span className="text-primary font-semibold tracking-wider uppercase text-sm">Rólam</span>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">Ki vagyok és mivel foglalkozom?</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -828,30 +1022,37 @@ export default function Home() {
                   A célom mindig ugyanaz: olyan oldalad legyen, ami érthető, gyorsan betölt, és ami a legfontosabb: pénzt termel helyetted, nem csak "jól néz ki".
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <Card className="bg-white border-none shadow-xl shadow-primary/5 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-              <CardContent className="p-6 space-y-4">
-                <h3 className="font-bold text-lg flex items-center gap-2 text-black">
-                  <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
-                  Miért én?
-                </h3>
-                <ul className="space-y-3">
-                  {[
-                    "Teljes technikai háttér – stabil és gyors megoldások",
-                    "Nincs sablon – egyedi design, ami kitűnik a tömegből",
-                    "100%-ban a te márkádra szabva",
-                    "Bármilyen egyedi funkció megvalósítható"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700 font-medium">
-                      <Check className="h-4 w-4 text-black mt-1 shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Card className="bg-white border-none shadow-xl shadow-primary/5 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+                <CardContent className="p-6 space-y-4">
+                  <h3 className="font-bold text-lg flex items-center gap-2 text-black">
+                    <Star className="h-5 w-5 text-yellow-500 fill-yellow-500" />
+                    Miért én?
+                  </h3>
+                  <ul className="space-y-3">
+                    {[
+                      "Teljes technikai háttér – stabil és gyors megoldások",
+                      "Nincs sablon – egyedi design, ami kitűnik a tömegből",
+                      "100%-ban a te márkádra szabva",
+                      "Bármilyen egyedi funkció megvalósítható"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-700 font-medium">
+                        <Check className="h-4 w-4 text-black mt-1 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -859,10 +1060,16 @@ export default function Home() {
       {/* FAQ Section (NEW) */}
       <section id="faq" className="py-24 bg-secondary/20">
         <div className="container mx-auto px-6 max-w-3xl">
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Gyakori kérdések</h2>
             <p className="text-muted-foreground">Minden, amit tudnod kell az együttműködésről.</p>
-          </div>
+          </motion.div>
 
           <Accordion type="single" collapsible className="w-full space-y-4">
             {[
@@ -891,14 +1098,22 @@ export default function Home() {
                 a: "Kétféle módon: vagy megkereslek embereket, akiknek nincs oldaluk, és rájuk szabva készítek egy demo oldalt, amit megmutatok nekik – ha tetszik, övék. Vagy te keresel meg, és közvetlenül készítem el az oldalt."
               }
             ].map((faq, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="bg-card border border-border/50 rounded-xl px-6 shadow-sm">
-                <AccordionTrigger className="text-lg font-medium hover:text-primary hover:no-underline py-6">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed pb-6 text-base">
-                  {faq.a}
-                </AccordionContent>
-              </AccordionItem>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+              >
+                <AccordionItem value={`item-${i}`} className="bg-card border border-border/50 rounded-xl px-6 shadow-sm">
+                  <AccordionTrigger className="text-lg font-medium hover:text-primary hover:no-underline py-6">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground leading-relaxed pb-6 text-base">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              </motion.div>
             ))}
           </Accordion>
         </div>
@@ -906,7 +1121,13 @@ export default function Home() {
       <section id="contact" className="py-24 bg-background text-foreground">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16">
-            <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
               <div>
                 <h2 className="text-3xl md:text-5xl font-bold mb-6">Beszéljünk az oldaladról!</h2>
                 <p className="text-muted-foreground text-lg leading-relaxed">
@@ -935,75 +1156,175 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <Card className="border-none shadow-2xl">
-              <CardHeader>
-                <CardTitle className="text-2xl text-foreground">Írj üzenetet</CardTitle>
-                <CardDescription>Általában 24 órán belül válaszolok.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-foreground">Név</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Kovács Anna" {...field} className="bg-muted/30" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-foreground">Email cím</FormLabel>
-                          <FormControl>
-                            <Input placeholder="anna@pelda.hu" {...field} className="bg-muted/30" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-foreground">Üzenet</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Szia! Érdeklődnék a webshop készítéssel kapcsolatban..."
-                              className="min-h-[120px] bg-muted/30"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" className="w-full text-lg py-6 rounded-xl">
-                      Üzenet küldése
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Card className="border-none shadow-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-foreground">Írj üzenetet</CardTitle>
+                  <CardDescription>Általában 24 órán belül válaszolok.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-foreground">Név</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Kovács Anna" {...field} className="bg-muted/30" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-foreground">Email cím</FormLabel>
+                            <FormControl>
+                              <Input placeholder="anna@pelda.hu" {...field} className="bg-muted/30" />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="projectType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-foreground">Miben gondolkodsz?</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="bg-muted/30">
+                                  <SelectValue placeholder="Válassz egy opciót" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="new-website">Új bemutatkozó oldal</SelectItem>
+                                <SelectItem value="new-webshop">Új webshop</SelectItem>
+                                <SelectItem value="redesign">Meglévő oldal átalakítása</SelectItem>
+                                <SelectItem value="inquiry">Még nem tudom, csak érdeklődöm</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-foreground">Üzenet</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Szia! Érdeklődnék a webshop készítéssel kapcsolatban..."
+                                className="min-h-[120px] bg-muted/30"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button type="submit" className="w-full text-lg py-6 rounded-xl">
+                        Üzenet küldése
+                      </Button>
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-background border-t border-border py-12 text-center text-sm text-muted-foreground">
-        <div className="container mx-auto">
-          <p className="mb-4 font-bold text-foreground text-lg font-heading">Balogh Ferenc</p>
-          <p>&copy; 2025 Minden jog fenntartva.</p>
+      <footer className="bg-card border-t border-border pt-16 pb-8 text-sm">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            <div className="space-y-4">
+              <div className="font-heading font-bold text-xl text-foreground tracking-tight flex items-center gap-2">
+                <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center text-background font-bold">B</div>
+                Balogh Ferenc
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Egyedi weboldalak és webshopok vállalkozásoknak, akik többre vágynak egy sablonnál.
+              </p>
+              <div className="flex gap-4">
+                <a href="#" className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Facebook className="h-5 w-5" />
+                </a>
+                <a href="#" className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Instagram className="h-5 w-5" />
+                </a>
+                <a href="#" className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Linkedin className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-foreground text-lg mb-4">Navigáció</h3>
+              <ul className="space-y-3 text-muted-foreground">
+                <li><button onClick={() => scrollToSection('services')} className="hover:text-primary transition-colors">Szolgáltatások</button></li>
+                <li><button onClick={() => scrollToSection('pricing')} className="hover:text-primary transition-colors">Árazás</button></li>
+                <li><button onClick={() => scrollToSection('portfolio')} className="hover:text-primary transition-colors">Munkáim</button></li>
+                <li><button onClick={() => scrollToSection('about')} className="hover:text-primary transition-colors">Rólam</button></li>
+                <li><button onClick={() => scrollToSection('faq')} className="hover:text-primary transition-colors">GYIK</button></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-foreground text-lg mb-4">Jogi</h3>
+              <ul className="space-y-3 text-muted-foreground">
+                <li><a href="#" className="hover:text-primary transition-colors">Adatkezelési tájékoztató</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">ÁSZF</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Impresszum</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Süti kezelés</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-foreground text-lg mb-4">Kapcsolat</h3>
+              <ul className="space-y-3 text-muted-foreground">
+                <li className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-primary" />
+                  hello@baloghferenc.hu
+                </li>
+                <li className="flex items-center gap-3">
+                  <Smartphone className="h-4 w-4 text-primary" />
+                  +36 30 123 4567
+                </li>
+                <li className="pt-4">
+                  <Button onClick={() => scrollToSection('contact')} variant="outline" className="w-full rounded-full">
+                    Üzenet küldése
+                  </Button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <Separator className="bg-border/50 mb-8" />
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground text-xs">
+            <p>&copy; 2025 Balogh Ferenc. Minden jog fenntartva.</p>
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 hover:text-foreground transition-colors">
+              Vissza az oldal tetejére
+              <ArrowRight className="h-3 w-3 -rotate-90" />
+            </button>
+          </div>
         </div>
       </footer>
 
