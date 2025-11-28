@@ -17,103 +17,32 @@ import {
   Wand2,
   ShoppingCart,
   PenTool,
-  Database
+  Database,
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Menu, ChevronDown, Globe } from "lucide-react";
 import { useState } from "react";
+import { DemoRequestModal } from "@/components/DemoRequestModal";
+import { SimpleContactForm } from "@/components/SimpleContactForm";
 
-// Assets
 // Assets
 import heroBg from "@assets/generated_images/minimalist_bright_home_office_workspace_with_laptop.png";
-
-// Form Schema
-const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "A név legalább 2 karakter legyen." }),
-  email: z.string().email({ message: "Érvényes email címet adj meg." }),
-  projectType: z.string().min(1, { message: "Kérlek válassz egy opciót." }),
-  message: z.string().min(10, { message: "Az üzenet legalább 10 karakter legyen." }),
-  // Optional social media and website fields
-  website: z.string().refine((val) => !val || z.string().url().safeParse(val).success, {
-    message: "Érvényes URL-t adj meg.",
-  }).optional().or(z.literal("")),
-  facebook: z.string().optional().or(z.literal("")),
-  instagram: z.string().optional().or(z.literal("")),
-  linkedin: z.string().optional().or(z.literal("")),
-  twitter: z.string().optional().or(z.literal("")),
-  tiktok: z.string().optional().or(z.literal("")),
-  youtube: z.string().optional().or(z.literal("")),
-  pinterest: z.string().optional().or(z.literal("")),
-});
 
 export default function Home() {
   const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [socialMediaOpen, setSocialMediaOpen] = useState(false);
-  const form = useForm<z.infer<typeof contactFormSchema>>({
-    resolver: zodResolver(contactFormSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      projectType: "",
-      message: "",
-      website: "",
-      facebook: "",
-      instagram: "",
-      linkedin: "",
-      twitter: "",
-      tiktok: "",
-      youtube: "",
-      pinterest: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof contactFormSchema>) {
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Hiba történt az üzenet küldése során.");
-      }
-
-      toast({
-        title: "Üzenet elküldve!",
-        description: "Köszönöm! Hamarosan felveszem veled a kapcsolatot. Ha megadtad az online jelenléted, személyre szabott demót készítek neked.",
-      });
-      form.reset();
-    } catch (error) {
-      console.error("Error submitting contact form:", error);
-      toast({
-        title: "Hiba történt",
-        description: error instanceof Error ? error.message : "Nem sikerült elküldeni az üzenetet. Kérlek próbáld újra.",
-        variant: "destructive",
-      });
-    }
-  }
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [selectedReference, setSelectedReference] = useState<string | null>(null);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -123,11 +52,16 @@ export default function Home() {
     }
   };
 
+  const openDemoModal = (reference?: string) => {
+    setSelectedReference(reference || null);
+    setIsDemoModalOpen(true);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-background font-sans text-foreground overflow-x-hidden">
-      {/* Navigation (Simple) */}
       {/* Navigation (Minimalist) */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/50 backdrop-blur-md border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="font-heading font-bold text-xl text-foreground tracking-tight flex items-center gap-2">
             <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center text-background font-bold">B</div>
@@ -142,7 +76,7 @@ export default function Home() {
             <button onClick={() => scrollToSection('contact')} className="hover:text-foreground transition-colors">Kapcsolat</button>
           </div>
           <div className="flex items-center gap-3">
-            <Button onClick={() => scrollToSection('demo')} variant="default" size="sm" className="hidden sm:flex rounded-full px-4 lg:px-6 font-medium text-xs lg:text-sm">
+            <Button onClick={() => openDemoModal()} variant="default" size="sm" className="hidden sm:flex rounded-full px-4 lg:px-6 font-medium text-xs lg:text-sm">
               <span className="hidden lg:inline">Kérem az ingyenes demótervet</span>
               <span className="lg:hidden">Demóterv</span>
             </Button>
@@ -173,7 +107,7 @@ export default function Home() {
                     Kapcsolat
                   </button>
                   <div className="pt-4 border-t">
-                    <Button onClick={() => scrollToSection('demo')} variant="default" className="w-full rounded-full">
+                    <Button onClick={() => openDemoModal()} variant="default" className="w-full rounded-full">
                       Kérem az ingyenes demótervet
                     </Button>
                   </div>
@@ -186,14 +120,14 @@ export default function Home() {
 
       {/* Hero Section (Animated & Dynamic) */}
       <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden min-h-[85vh] flex flex-col justify-center">
-        {/* Dynamic Background Glow */}
+        {/* Dynamic Background Glow - Optimized */}
         <motion.div
           animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            scale: [1, 1.1, 1],
+            opacity: [0.2, 0.3, 0.2],
           }}
           transition={{
-            duration: 8,
+            duration: 15,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -220,7 +154,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed mb-6 sm:mb-8"
+              className="text-base sm:text-lg md:text-xl text-muted-foreground/80 max-w-2xl leading-relaxed mb-6 sm:mb-8"
             >
               Sablonok helyett egyedi, kézzel épített weboldalak és webshopok. Kérj egy ingyenes látványtervet a saját márkádra, kötelezettségek nélkül.
             </motion.p>
@@ -230,18 +164,18 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
+              className="flex flex-wrap items-center gap-3 mb-8 sm:mb-12"
             >
-              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1 flex items-center gap-1">
-                <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1.5 flex items-center gap-1.5 bg-secondary/50 backdrop-blur-sm border-white/5">
+                <Check className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                 Két kattintásos igénylés
               </Badge>
-              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1 flex items-center gap-1">
-                <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1.5 flex items-center gap-1.5 bg-secondary/50 backdrop-blur-sm border-white/5">
+                <Check className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                 100% kockázatmentes
               </Badge>
-              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1 flex items-center gap-1">
-                <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+              <Badge variant="secondary" className="text-xs sm:text-sm px-3 py-1.5 flex items-center gap-1.5 bg-secondary/50 backdrop-blur-sm border-white/5">
+                <Check className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
                 Válasz 24 órán belül
               </Badge>
             </motion.div>
@@ -254,7 +188,7 @@ export default function Home() {
               className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-12"
             >
               <Button
-                onClick={() => scrollToSection('demo')}
+                onClick={() => openDemoModal()}
                 size="lg"
                 className="rounded-full px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105"
               >
@@ -477,7 +411,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Portfolio Section */}
+      {/* Portfolio Section - REDESIGNED */}
       <section id="portfolio" className="py-24 bg-background">
         <div className="container mx-auto px-6">
           <motion.div
@@ -489,12 +423,12 @@ export default function Home() {
           >
             <span className="text-primary font-semibold tracking-wider uppercase text-sm">Portfólió</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">Munkáimból</h2>
-            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+            <p className="text-muted-foreground mt-4 max-w-3xl mx-auto">
               Bár ezek demó projektek, pontosan ugyanezzel a gondossággal készítem el a te oldaladat is.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
             {[
               {
                 image: "/lilki_hero.png",
@@ -536,50 +470,58 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="flex flex-col group"
               >
-                <div className="group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer" onClick={() => setSelectedImage(project.image)}>
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col items-center justify-center text-center p-6 duration-300">
-                    <h3 className="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">{project.title}</h3>
-                    <p className="text-primary font-medium mb-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">{project.category}</p>
-                    <p className="text-white/80 text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100 mb-2 line-clamp-3">{project.fullDesc}</p>
-                    <p className={`text-white/60 text-xs translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-125 mb-4 ${project.isItalic ? 'italic' : ''}`}>{project.demoText || "Demó projekt – általam készített, nem megrendelt koncepció"}</p>
-                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">
-                      <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium border border-white/20 hover:bg-white/20 transition-colors">
-                        Megnézem
-                      </span>
-                    </div>
-                  </div>
-                  <img
+                {/* Image Container */}
+                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 border border-white/10 bg-card/50">
+                   <img
                     src={project.image}
                     alt={project.title}
-                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                    className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
                   />
+                  {/* Overlay with View Button */}
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <Button 
+                      variant="secondary" 
+                      size="sm" 
+                      className="rounded-full backdrop-blur-md bg-white/20 hover:bg-white/30 border border-white/20 text-white"
+                      onClick={() => setSelectedImage(project.image)}
+                    >
+                      <ExternalLink className="mr-2 h-4 w-4" /> Nagyítás
+                    </Button>
+                  </div>
                 </div>
-                {/* Mobile-only details shown below image for better readability on small screens if needed, 
-                    but sticking to the requested design which was overlay-based. 
-                    Adding a small caption below for mobile could be good, but user asked for "olyan mint amilyenre csinaltad" (like you made it).
-                    The previous design had NO text below. I will stick to that. 
-                */}
+
+                {/* Content Below Image */}
+                <div className="flex flex-col flex-grow">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground mb-1">{project.title}</h3>
+                      <p className="text-sm font-medium text-accent">{project.category}</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">
+                    {project.fullDesc}
+                  </p>
+
+                  <div className="mt-auto pt-4">
+                    <Button 
+                      onClick={() => openDemoModal(project.title)} 
+                      className="w-full rounded-xl bg-card border border-border hover:border-accent hover:bg-accent/5 hover:text-accent transition-all duration-300"
+                      variant="outline"
+                    >
+                      Ilyet szeretnék! <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               </motion.div>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <h3 className="text-2xl font-bold mb-4">Tetszik ez a stílus?</h3>
-            <p className="text-muted-foreground mb-6">Kérj hasonlót a saját márkádra!</p>
-            <Button
-              onClick={() => scrollToSection('demo')}
-              size="lg"
-              className="rounded-full px-8 py-6 text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
-            >
-              Ingyenes demóterv kérése
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials - IMPROVED */}
       <section className="py-24 bg-secondary/30">
         <div className="container mx-auto px-6">
           <motion.div
@@ -598,17 +540,17 @@ export default function Home() {
               {
                 text: "Végre nem kell egész nap az Instán válaszolgatnom az árakkal kapcsolatban! A webshopom automatikusan kezeli a rendeléseket, én pedig tudok az ékszerekre koncentrálni.",
                 author: "Kitti",
-                role: "kézműves ékszerkészítő"
+                role: "Kézműves ékszerkészítő"
               },
               {
                 text: "Feri nem csak megcsinálta, amit kértem, hanem jobb ötleteket is hozott. Az oldal sokkal profibb lett, mint amit elképzeltem, és a vevőim is imádják.",
                 author: "Péter",
-                role: "asztalos manufaktúra"
+                role: "Asztalos manufaktúra"
               },
               {
                 text: "Féltem a technikai részektől, de Feri mindent elintézett. Türelmesen elmagyarázta, hogyan tudom később én is szerkeszteni az oldalt. Csak ajánlani tudom!",
                 author: "Eszter",
-                role: "jógaoktató"
+                role: "Jógaoktató"
               }
             ].map((testimonial, i) => (
               <motion.div
@@ -618,17 +560,19 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <Card className="bg-background border-none shadow-sm h-full">
-                  <CardContent className="pt-6">
+                <Card className="bg-background border-none shadow-sm h-full flex flex-col">
+                  <CardContent className="pt-6 flex-grow">
                     <div className="flex gap-1 text-yellow-400 mb-4">
                       {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 fill-current" />)}
                     </div>
                     <p className="text-muted-foreground mb-6 italic leading-relaxed">"{testimonial.text}"</p>
+                  </CardContent>
+                  <CardFooter className="border-t border-border/50 pt-4">
                     <div>
                       <p className="font-bold text-foreground">{testimonial.author}</p>
-                      <p className="text-xs text-primary">{testimonial.role}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{testimonial.role}</p>
                     </div>
-                  </CardContent>
+                  </CardFooter>
                 </Card>
               </motion.div>
             ))}
@@ -646,8 +590,9 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold">Egyszerű, átlátható árazás</h2>
-            <p className="text-muted-foreground mt-2">Nincsenek rejtett költségek. Azt kapod, amit megbeszélünk.</p>
+            <span className="text-primary font-semibold tracking-wider uppercase text-sm">Árazás</span>
+            <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Egyszerű, átlátható árazás</h2>
+            <p className="text-muted-foreground">Nincsenek rejtett költségek. Azt kapod, amit megbeszélünk.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -656,7 +601,7 @@ export default function Home() {
                 name: "One-Page",
                 price: "180.000 Ft-tól",
                 desc: "Tökéletes bemutatkozó oldal induló vállalkozásoknak.",
-                features: ["Egyoldalas felépítés", "Bemutatkozás, Szolgáltatások", "Kapcsolati űrlap", "Mobilbarát design", "Alap SEO beállítás", "Admin felület szövegszerkesztéshez", "1 hónap támogatás"]
+                features: ["Egyoldalas felépítés", "Kapcsolati űrlap", "Mobilbarát design", "Alap SEO beállítás", "Admin felület szövegszerkesztéshez", "1 hónap támogatás"]
               },
               {
                 name: "Mini Webshop",
@@ -679,7 +624,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <Card className={`relative h-full flex flex-col ${plan.popular ? 'border-primary shadow-lg shadow-primary/10 scale-105 z-10' : 'border-border'}`}>
+                <Card className={`relative h-full flex flex-col group hover:shadow-2xl hover:shadow-accent/20 hover:-translate-y-2 transition-all duration-500 ${plan.popular ? 'border-primary shadow-lg shadow-primary/10 scale-105 z-10' : 'border-border'}`}>
                   {plan.popular && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
                       Legnépszerűbb
@@ -700,7 +645,7 @@ export default function Home() {
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    <Button onClick={() => scrollToSection('demo')} className="w-full" variant={plan.popular ? "default" : "outline"}>
+                    <Button onClick={() => openDemoModal()} className="w-full" variant={plan.popular ? "default" : "outline"}>
                       Ehhez kérek demótervet
                     </Button>
                   </CardFooter>
@@ -899,7 +844,7 @@ export default function Home() {
             {/* CTA Button */}
             <div className="text-center">
               <Button
-                onClick={() => scrollToSection('contact')}
+                onClick={() => openDemoModal()}
                 size="lg"
                 className="rounded-full px-8 py-6 text-lg font-medium bg-accent text-accent-foreground hover:bg-accent/90"
               >
@@ -925,7 +870,7 @@ export default function Home() {
               <p className="text-gray-300 text-lg mb-8">
                 Tudom, hogy vállalkozóként ezer dolgod van. A célom, hogy a weboldalad ne egy újabb feladat legyen, hanem egy eszköz, ami leveszi a terhet a válladról.
               </p>
-              <Button onClick={() => scrollToSection('contact')} variant="secondary" size="lg" className="rounded-full">
+              <Button onClick={() => openDemoModal()} variant="secondary" size="lg" className="rounded-full">
                 Kérem a demótervet
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -1076,7 +1021,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ Section (NEW) */}
+      {/* FAQ Section */}
       <section id="faq" className="py-24 bg-secondary/20">
         <div className="container mx-auto px-6 max-w-3xl">
           <motion.div
@@ -1200,313 +1145,10 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex justify-center w-full"
             >
-              <Card className="border-none shadow-2xl w-full max-w-lg mx-auto">
-                <CardHeader className="px-5 sm:px-8 pt-8">
-                  <CardTitle className="text-2xl text-foreground">Írj üzenetet</CardTitle>
-                  <CardDescription>Általában 24 órán belül válaszolok.</CardDescription>
-                </CardHeader>
-                <CardContent className="px-5 sm:px-8 pb-8">
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Név</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Kovács Anna" {...field} className="bg-muted/30" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Email cím</FormLabel>
-                            <FormControl>
-                              <Input placeholder="anna@pelda.hu" {...field} className="bg-muted/30" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="projectType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Miben gondolkodsz?</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger className="bg-muted/30">
-                                  <SelectValue placeholder="Válassz egy opciót" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="new-website">Új bemutatkozó oldal</SelectItem>
-                                <SelectItem value="new-webshop">Új webshop</SelectItem>
-                                <SelectItem value="redesign">Meglévő oldal átalakítása</SelectItem>
-                                <SelectItem value="inquiry">Még nem tudom, csak érdeklődöm</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="message"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-foreground">Üzenet</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="Szia! Érdeklődnék a webshop készítéssel kapcsolatban..."
-                                className="min-h-[120px] bg-muted/30"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      {/* Online Presence Section */}
-                      <Collapsible open={socialMediaOpen} onOpenChange={setSocialMediaOpen} className="space-y-4">
-                        <CollapsibleTrigger className="flex items-start sm:items-center justify-between w-full text-left text-sm font-medium text-foreground hover:text-primary transition-colors gap-2">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                            <span>Online jelenlét (opcionális)</span>
-                            <Badge variant="secondary" className="text-xs w-fit whitespace-normal text-left leading-tight">Segíts nekem egy személyre szabott demót készíteni</Badge>
-                          </div>
-                          <ChevronDown className={`h-4 w-4 shrink-0 mt-1 sm:mt-0 transition-transform duration-200 ${socialMediaOpen ? 'rotate-180' : ''}`} />
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="space-y-4 pt-2">
-                          <p className="text-xs text-muted-foreground mb-4">
-                            Ha megadod a social media profiljaidat vagy weboldaladat, személyre szabottabb demót tudok készíteni a márkádra.
-                          </p>
-                          
-                          <FormField
-                            control={form.control}
-                            name="website"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-foreground flex items-center gap-2">
-                                  <Globe className="h-4 w-4" />
-                                  Weboldal URL
-                                </FormLabel>
-                                <FormControl>
-                                  <Input 
-                                    placeholder="https://pelda.hu" 
-                                    {...field} 
-                                    className="bg-muted/30" 
-                                    type="url"
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <FormField
-                              control={form.control}
-                              name="facebook"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <Facebook className="h-4 w-4" />
-                                    Facebook
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="facebook.com/username" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="instagram"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <Instagram className="h-4 w-4" />
-                                    Instagram
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="instagram.com/username" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="linkedin"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <Linkedin className="h-4 w-4" />
-                                    LinkedIn
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="linkedin.com/in/username" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="twitter"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <Twitter className="h-4 w-4" />
-                                    Twitter/X
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="x.com/username" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="tiktok"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <span className="text-sm font-bold">TikTok</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="tiktok.com/@username" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="youtube"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <span className="text-sm font-bold">YouTube</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="youtube.com/@channel" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="pinterest"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-foreground flex items-center gap-2">
-                                    <span className="text-sm font-bold">Pinterest</span>
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input 
-                                      placeholder="pinterest.com/username" 
-                                      {...field} 
-                                      className="bg-muted/30" 
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                        </CollapsibleContent>
-                      </Collapsible>
-                      
-                      <Button type="submit" className="w-full text-lg py-6 rounded-xl">
-                        Üzenet küldése
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
+              {/* Replaced ContactFormWizard with SimpleContactForm */}
+              <SimpleContactForm />
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* Lead Magnet Section (NEW) */}
-      <section className="py-20 bg-card border-y border-border relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div className="container mx-auto px-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto"
-          >
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <Badge className="mb-4 bg-accent text-accent-foreground hover:bg-accent/90">Ingyenes letöltés</Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">5 hiba, ami miatt pénzt veszítesz a webshopoddal</h2>
-                <p className="text-lg text-muted-foreground mb-8">
-                  Összeszedtem a leggyakoribb hibákat, amiket a legtöbb kezdő webshop elkövet. Töltsd le a listát, és ellenőrizd, hogy a te oldalad rendben van-e!
-                </p>
-                <form className="flex flex-col sm:flex-row gap-3">
-                  <Input placeholder="Email címed…" className="bg-white/90 text-foreground border-0 h-12" />
-                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 h-12 px-8 font-bold">
-                    Megnézem, mit rontok el
-                  </Button>
-                </form>
-                <p className="text-xs mt-3 opacity-60">Kizárólag hasznos tartalmat küldök. Bármikor leiratkozhatsz.</p>
-              </div>
-              <div className="hidden md:flex justify-center">
-                <div className="relative w-64 h-80 bg-white rounded-lg shadow-2xl rotate-3 flex items-center justify-center text-primary font-bold text-2xl border-4 border-accent/50">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white to-gray-100 rounded-lg p-8 flex flex-col items-center justify-center text-center">
-                    <Zap className="h-16 w-16 text-accent mb-4" />
-                    CHECKLIST – Webshop Audit 2025
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
@@ -1588,6 +1230,13 @@ export default function Home() {
         </div>
       </footer>
 
+      {/* Demo Request Modal */}
+      <DemoRequestModal 
+        open={isDemoModalOpen} 
+        onOpenChange={setIsDemoModalOpen} 
+        initialReference={selectedReference}
+      />
+
       {/* Portfolio Image Modal */}
       <Dialog open={!!selectedImage} onOpenChange={(open) => !open && setSelectedImage(null)}>
         <DialogContent className="max-w-7xl w-full p-0 bg-black/95 border-none">
@@ -1603,4 +1252,3 @@ export default function Home() {
     </div>
   );
 }
-

@@ -9,7 +9,7 @@ const contactFormSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   projectType: z.string().min(1),
-  message: z.string().min(10),
+  message: z.string().optional().or(z.literal("")),
   website: z.string().url().optional().or(z.literal("")),
   facebook: z.string().optional().or(z.literal("")),
   instagram: z.string().optional().or(z.literal("")),
@@ -45,7 +45,7 @@ export async function registerRoutes(
         name: validatedData.name,
         email: validatedData.email,
         projectType: validatedData.projectType,
-        message: validatedData.message,
+        message: validatedData.message || "",
         website: validatedData.website || undefined,
         socialMedia: Object.keys(socialMedia).length > 0 ? JSON.stringify(socialMedia) : undefined,
       };
