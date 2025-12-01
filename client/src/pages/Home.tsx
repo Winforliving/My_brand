@@ -64,8 +64,8 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="font-heading font-bold text-xl text-foreground tracking-tight flex items-center gap-2">
-            <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center text-background font-bold">B</div>
-            Balogh Ferenc
+            <img src="/logo.svg" alt="Kvantum Digital" className="w-8 h-8" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+            Kvantum Digital
           </div>
           <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <button onClick={() => scrollToSection('services')} className="hover:text-foreground transition-colors">Szolgáltatások</button>
@@ -473,7 +473,7 @@ export default function Home() {
                 className="flex flex-col group"
               >
                 {/* Image Container */}
-                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 border border-white/10 bg-card/50">
+                <div className="relative overflow-hidden rounded-2xl aspect-4/3 mb-6 border border-white/10 bg-card/50">
                    <img
                     src={project.image}
                     alt={project.title}
@@ -493,7 +493,7 @@ export default function Home() {
                 </div>
 
                 {/* Content Below Image */}
-                <div className="flex flex-col flex-grow">
+                <div className="flex flex-col grow">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h3 className="text-2xl font-bold text-foreground mb-1">{project.title}</h3>
@@ -561,7 +561,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <Card className="bg-background border-none shadow-sm h-full flex flex-col">
-                  <CardContent className="pt-6 flex-grow">
+                  <CardContent className="pt-6 grow">
                     <div className="flex gap-1 text-yellow-400 mb-4">
                       {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 fill-current" />)}
                     </div>
@@ -634,7 +634,7 @@ export default function Home() {
                     <CardTitle className="text-2xl">{plan.name}</CardTitle>
                     <CardDescription>{plan.desc}</CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-grow">
+                  <CardContent className="grow">
                     <div className="text-3xl font-bold mb-6">{plan.price}</div>
                     <ul className="space-y-3">
                       {plan.features.map((feature, j) => (
@@ -974,7 +974,7 @@ export default function Home() {
               </div>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p className="text-base">
-                  Balogh Ferenc vagyok. Egyedi weboldalakat és webshopokat készítek, sablonok nélkül, mindent kódolva. Backend és frontend fejlesztőként dolgozom, de a fókusz nem a technikai részleteken van – hanem azon, hogy a te vállalkozásod hogyan növekedjen.
+                  A Kvantum Digital-nál egyedi weboldalakat és webshopokat készítünk, sablonok nélkül, mindent kódolva. Backend és frontend fejlesztőként dolgozunk, de a fókusz nem a technikai részleteken van – hanem azon, hogy a te vállalkozásod hogyan növekedjen.
                 </p>
                 <p className="text-base">
                   Egyedi megoldásokat készítek, ami azt jelenti: gyorsabb, biztonságosabb és rugalmasabb rendszert kapsz, mint amit egy kész sablon adna. Nem kell kompromisszumot kötnöd olyan funkciók miatt, amik nincsenek benne.
@@ -1158,8 +1158,8 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="space-y-4">
               <div className="font-heading font-bold text-xl text-foreground tracking-tight flex items-center gap-2">
-                <div className="w-8 h-8 bg-foreground rounded-full flex items-center justify-center text-background font-bold">B</div>
-                Balogh Ferenc
+                <img src="/logo.svg" alt="Kvantum Digital" className="w-8 h-8" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                Kvantum Digital
               </div>
               <p className="text-muted-foreground leading-relaxed">
                 Egyedi weboldalak és webshopok vállalkozásoknak, akik többre vágynak egy sablonnál.
@@ -1203,7 +1203,7 @@ export default function Home() {
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-primary" />
-                  hello@baloghferenc.hu
+                  hello@kvantumdigital.hu
                 </li>
                 <li className="flex items-center gap-3">
                   <Smartphone className="h-4 w-4 text-primary" />
@@ -1221,7 +1221,7 @@ export default function Home() {
           <Separator className="bg-border/50 mb-8" />
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground text-xs">
-            <p>&copy; 2025 Balogh Ferenc. Minden jog fenntartva.</p>
+            <p>&copy; 2025 Kvantum Digital. Minden jog fenntartva.</p>
             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 hover:text-foreground transition-colors">
               Vissza az oldal tetejére
               <ArrowRight className="h-3 w-3 -rotate-90" />
