@@ -194,3 +194,9 @@ mert minden információ egy helyen van az oldalon."
 Ha ezeket a változtatásokat implementálod, a hero section értékelése:
 **7.2/10 → 8.5-9/10** lesz! 🚀
 
+
+
+
+
+
+

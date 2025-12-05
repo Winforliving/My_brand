@@ -8,10 +8,6 @@ import {
   Zap,
   Mail,
   Smartphone,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Twitter,
   Star,
   Settings,
   Wand2,
@@ -424,7 +420,7 @@ export default function Home() {
             <span className="text-primary font-semibold tracking-wider uppercase text-sm">Portfólió</span>
             <h2 className="text-3xl md:text-4xl font-bold mt-2">Munkáimból</h2>
             <p className="text-muted-foreground mt-4 max-w-3xl mx-auto">
-              Bár ezek demó projektek, pontosan ugyanezzel a gondossággal készítem el a te oldaladat is.
+              Nézd meg a munkáimat – élő projekteket és demó koncepciókat is találsz itt.
             </p>
           </motion.div>
 
@@ -439,7 +435,8 @@ export default function Home() {
                 tags: ["Design", "E-commerce", "Branding"],
                 fullTitle: "Lilki – webshop koncepció",
                 demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
-                isItalic: true
+                isItalic: true,
+                isLive: false
               },
               {
                 image: "/ymolit_hero.png",
@@ -450,18 +447,20 @@ export default function Home() {
                 tags: ["E-commerce", "Design", "Branding"],
                 fullTitle: "Ymolit – kézműves webshop koncepció",
                 demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
-                isItalic: false
+                isItalic: false,
+                isLive: false
               },
               {
-                image: "/babacsillag_hero.png",
-                category: "Márkaoldal + shop",
-                title: "Babacsillag",
-                desc: "Természetes hatású dizájn, mobilra optimalizálva.",
-                fullDesc: "Természetes hatású dizájn, ami tükrözi a márka értékeit. Mobilra optimalizált, egyszerű vásárlási folyamattal.",
-                tags: ["UI/UX", "Next.js", "SEO"],
-                fullTitle: "Babacsillag – márkaoldal + shop koncepció",
-                demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
-                isItalic: true
+                image: "/winforliving_hero.png",
+                category: "SaaS",
+                title: "Winforliving",
+                desc: "SaaS platform MTT póker játékosoknak.",
+                fullDesc: "SaaS platform MTT póker játékosoknak verseny optimalizáláshoz, stratégia tanuláshoz és bankroll kezeléshez.",
+                tags: ["SaaS", "Next.js", "TypeScript", "Full-stack"],
+                fullTitle: "Winforliving – SaaS platform MTT póker játékosoknak",
+                demoText: "Élő projekt",
+                isItalic: false,
+                isLive: true
               }
             ].map((project, i) => (
               <motion.div
@@ -497,7 +496,18 @@ export default function Home() {
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h3 className="text-2xl font-bold text-foreground mb-1">{project.title}</h3>
-                      <p className="text-sm font-medium text-accent">{project.category}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-accent">{project.category}</p>
+                        {(project as any).isLive ? (
+                          <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-secondary/50 backdrop-blur-sm border-white/5">
+                            Élő projekt
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-secondary/50 backdrop-blur-sm border-white/5 opacity-70">
+                            Demo
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
                   
@@ -543,12 +553,12 @@ export default function Home() {
                 role: "Kézműves ékszerkészítő"
               },
               {
-                text: "Feri nem csak megcsinálta, amit kértem, hanem jobb ötleteket is hozott. Az oldal sokkal profibb lett, mint amit elképzeltem, és a vevőim is imádják.",
+                text: "Kvantum Digital nem csak megcsinálta, amit kértem, hanem jobb ötleteket is hozott. Az oldal sokkal profibb lett, mint amit elképzeltem, és a vevőim is imádják.",
                 author: "Péter",
                 role: "Asztalos manufaktúra"
               },
               {
-                text: "Féltem a technikai részektől, de Feri mindent elintézett. Türelmesen elmagyarázta, hogyan tudom később én is szerkeszteni az oldalt. Csak ajánlani tudom!",
+                text: "Féltem a technikai részektől, de Kvantum Digital mindent elintézett. Türelmesen elmagyarázta, hogyan tudom később én is szerkeszteni az oldalt. Csak ajánlani tudom!",
                 author: "Eszter",
                 role: "Jógaoktató"
               }
@@ -1059,7 +1069,7 @@ export default function Home() {
               },
               {
                 q: "Hogyan dolgozol?",
-                a: "Kétféle módon: vagy megkereslek embereket, akiknek nincs oldaluk, és rájuk szabva készítek egy demo oldalt, amit megmutatok nekik – ha tetszik, övék. Vagy te keresel meg, és közvetlenül készítem el az oldalt."
+                a: "Kétféle módon: vagy megkeresek embereket, akiknek nincs oldaluk, és rájuk szabva készítek egy demo oldalt, amit megmutatok nekik – ha tetszik, övék. Vagy te keresel meg, és közvetlenül készítem el az oldalt."
               },
               {
                 q: "Mi történik, ha elkészíted a demót, de nekem mégsem tetszik?",
@@ -1119,7 +1129,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm opacity-70">Email cím</p>
-                      <p className="font-bold text-xl break-all sm:break-normal">hello@baloghferenc.hu</p>
+                      <p className="font-bold text-xl break-all sm:break-normal">hello@kvantumdigital.hu</p>
                     </div>
                   </div>
                 </div>
@@ -1131,7 +1141,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm opacity-70">Telefon</p>
-                      <p className="font-bold text-xl">+36 30 123 4567</p>
+                      <p className="font-bold text-xl">+36 30 908 7318</p>
                     </div>
                   </div>
                 </div>
@@ -1164,17 +1174,6 @@ export default function Home() {
               <p className="text-muted-foreground leading-relaxed">
                 Egyedi weboldalak és webshopok vállalkozásoknak, akik többre vágynak egy sablonnál.
               </p>
-              <div className="flex gap-4">
-                <a href="#" className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
-                  <Facebook className="h-5 w-5" />
-                </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
-                  <Instagram className="h-5 w-5" />
-                </a>
-                <a href="#" className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors">
-                  <Linkedin className="h-5 w-5" />
-                </a>
-              </div>
             </div>
 
             <div>
@@ -1207,7 +1206,7 @@ export default function Home() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Smartphone className="h-4 w-4 text-primary" />
-                  +36 30 123 4567
+                  +36 30 908 7318
                 </li>
                 <li className="pt-4">
                   <Button onClick={() => scrollToSection('contact')} variant="outline" className="w-full rounded-full">
