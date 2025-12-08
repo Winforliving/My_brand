@@ -1129,7 +1129,7 @@ export default function Home() {
                     </div>
                     <div>
                       <p className="text-sm opacity-70">Email cím</p>
-                      <p className="font-bold text-xl break-all sm:break-normal">hello@kvantumdigital.hu</p>
+                      <p className="font-bold text-xl break-all sm:break-normal">kvantumdigital@gmail.com</p>
                     </div>
                   </div>
                 </div>
@@ -1202,7 +1202,7 @@ export default function Home() {
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-center gap-3">
                   <Mail className="h-4 w-4 text-primary" />
-                  hello@kvantumdigital.hu
+                  kvantumdigital@gmail.com
                 </li>
                 <li className="flex items-center gap-3">
                   <Smartphone className="h-4 w-4 text-primary" />
