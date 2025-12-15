@@ -1,11 +1,10 @@
 // Set VERCEL environment variable to indicate serverless environment
 process.env.VERCEL = "1";
 
-// Import the app after setting the environment variable
-// This ensures the server doesn't try to start listening
-import { app } from "../server/index";
+// Dynamically import the bundled server (dist/index.cjs) so it works on Vercel
+// The build step creates dist/index.cjs from server/index.ts
+const { app } = await import("../dist/index.cjs");
 
 // Export the Express app as a serverless function for Vercel
-// Vercel will automatically handle the Express app
 export default app;
 
