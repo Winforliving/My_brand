@@ -67,7 +67,8 @@ app.use((req, res, next) => {
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
+    // Do not rethrow in serverless env to avoid double 500/HTML error pages
+    console.error("Unhandled error:", err);
   });
 
   // importantly only setup vite in development and after
