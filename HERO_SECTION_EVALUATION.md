@@ -200,3 +200,7 @@ Ha ezeket a változtatásokat implementálod, a hero section értékelése:
 
 
 
+
+
+
+

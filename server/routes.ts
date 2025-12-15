@@ -2,6 +2,7 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSchema } from "@shared/schema";
+import { sendDemoRequestEmail } from "./email";
 import { z } from "zod";
 
 // Contact form schema matching the frontend
@@ -53,12 +54,20 @@ export async function registerRoutes(
       // Validate with insertContactSchema
       const insertData = insertContactSchema.parse(contactData);
 
-      // Save to storage
+      // Save to storage (Supabase if configured, otherwise in-memory)
       const contact = await storage.createContact(insertData);
 
-      // TODO: Send email notification here (when email is configured)
-      // For now, just log it
-      console.log("New contact submission:", {
+      // Try to send email notification; errors are caught inside sendDemoRequestEmail
+      await sendDemoRequestEmail({
+        name: contact.name,
+        email: contact.email,
+        projectType: contact.projectType,
+        message: contact.message || undefined,
+        website: contact.website || undefined,
+        socialMedia: contact.socialMedia || undefined,
+      });
+
+      console.log("✅ New contact saved:", {
         id: contact.id,
         name: contact.name,
         email: contact.email,

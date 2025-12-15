@@ -1,5 +1,4 @@
 import { type User, type InsertUser, type Contact, type InsertContact } from "@shared/schema";
-import { randomUUID } from "crypto";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -11,7 +10,8 @@ export interface IStorage {
   createContact(contact: InsertContact): Promise<Contact>;
 }
 
-export class MemStorage implements IStorage {
+// Simple in-memory storage only (Supabase/DB removed)
+class MemStorage implements IStorage {
   private users: Map<string, User>;
   private contacts: Map<string, Contact>;
 
@@ -31,6 +31,7 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    const { randomUUID } = await import("crypto");
     const id = randomUUID();
     const user: User = { ...insertUser, id };
     this.users.set(id, user);
@@ -38,6 +39,7 @@ export class MemStorage implements IStorage {
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {
+    const { randomUUID } = await import("crypto");
     const id = randomUUID();
     const contact: Contact = {
       ...insertContact,
@@ -49,4 +51,5 @@ export class MemStorage implements IStorage {
   }
 }
 
+// Always use in-memory storage (no external DB)
 export const storage = new MemStorage();
