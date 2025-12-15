@@ -47,8 +47,9 @@ export async function registerRoutes(
         email: validatedData.email,
         projectType: validatedData.projectType,
         message: validatedData.message || "",
-        website: validatedData.website || undefined,
-        socialMedia: Object.keys(socialMedia).length > 0 ? JSON.stringify(socialMedia) : undefined,
+        // Drizzle schema expects string | null, so normalize undefined -> null
+        website: validatedData.website || null,
+        socialMedia: Object.keys(socialMedia).length > 0 ? JSON.stringify(socialMedia) : null,
       };
 
       // Validate with insertContactSchema

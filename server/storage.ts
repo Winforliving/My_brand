@@ -44,6 +44,9 @@ class MemStorage implements IStorage {
     const contact: Contact = {
       ...insertContact,
       id,
+      // Ensure nulls (not undefined) to match Contact type
+      website: insertContact.website ?? null,
+      socialMedia: insertContact.socialMedia ?? null,
       createdAt: new Date(),
     };
     this.contacts.set(id, contact);
