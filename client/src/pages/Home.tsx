@@ -439,13 +439,13 @@ export default function Home() {
                 isLive: false
               },
               {
-                image: "/ymolit_hero.png",
-                category: "Kézműves webshop",
-                title: "Ymolit",
-                desc: "Kézműves termékek webshopja természetes anyagokkal.",
-                fullDesc: "Kézműves termékek webshopja, amely a természetes anyagok és az egyedi készítés szépségét emeli ki.",
-                tags: ["E-commerce", "Design", "Branding"],
-                fullTitle: "Ymolit – kézműves webshop koncepció",
+                image: "/babacsillag_hero.png",
+                category: "Baba-mama webshop",
+                title: "Babacsillag",
+                desc: "Prémium babatermékek és kiegészítők webshopja.",
+                fullDesc: "Egyedi, kézzel készült babatermékek és kiegészítők webshopja, ahol a minőség és a szeretet találkozik.",
+                tags: ["E-commerce", "Design", "Baby Products"],
+                fullTitle: "Babacsillag – prémium baba-mama webshop koncepció",
                 demoText: "Demó projekt – általam készített, nem megrendelt koncepció",
                 isItalic: false,
                 isLive: false
@@ -473,16 +473,16 @@ export default function Home() {
               >
                 {/* Image Container */}
                 <div className="relative overflow-hidden rounded-2xl aspect-4/3 mb-6 border border-white/10 bg-card/50">
-                   <img
+                  <img
                     src={project.image}
                     alt={project.title}
                     className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Overlay with View Button */}
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       className="rounded-full backdrop-blur-md bg-white/20 hover:bg-white/30 border border-white/20 text-white"
                       onClick={() => setSelectedImage(project.image)}
                     >
@@ -510,14 +510,14 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <p className="text-muted-foreground text-sm leading-relaxed mb-4 line-clamp-3">
                     {project.fullDesc}
                   </p>
 
                   <div className="mt-auto pt-4">
-                    <Button 
-                      onClick={() => openDemoModal(project.title)} 
+                    <Button
+                      onClick={() => openDemoModal(project.title)}
                       className="w-full rounded-xl bg-card border border-border hover:border-accent hover:bg-accent/5 hover:text-accent transition-all duration-300"
                       variant="outline"
                     >
@@ -1230,9 +1230,9 @@ export default function Home() {
       </footer>
 
       {/* Demo Request Modal */}
-      <DemoRequestModal 
-        open={isDemoModalOpen} 
-        onOpenChange={setIsDemoModalOpen} 
+      <DemoRequestModal
+        open={isDemoModalOpen}
+        onOpenChange={setIsDemoModalOpen}
         initialReference={selectedReference}
       />
 
